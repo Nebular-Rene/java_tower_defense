@@ -7,10 +7,10 @@ public class GameLogic {
     public ArrayList<Enemies> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 0;
+    public int money = 10000000;
     public int towerPrice = 0;
 
-    private int currentLevel = 0;
+    private int currentLevel = 14;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {
@@ -54,25 +54,25 @@ public class GameLogic {
         }
 
         if (levelSpawned() && enemies.isEmpty()) {
-            currentLevelConfig = levels[currentLevel];
+            currentLevelConfig = levels[currentLevel % levels.length];
             currentLevel++;
         }
         if (currentLevelConfig[0] > 0) {
             enemies.add(new Enemies(Color.RED));
             currentLevelConfig[0]--;
-            spawnCooldown = 25 / currentLevel;
+            spawnCooldown = (40 / currentLevel) + 5;
         } else if (currentLevelConfig[1] > 0) {
             enemies.add(new Enemies(Color.ORANGE));
             currentLevelConfig[1]--;
-            spawnCooldown = 50 / currentLevel;
+            spawnCooldown = (80 / currentLevel) + 10;
         } else if (currentLevelConfig[2] > 0) {
             enemies.add(new Enemies(Color.YELLOW));
             currentLevelConfig[2]--;
-            spawnCooldown = 100 / currentLevel;
+            spawnCooldown = (120 / currentLevel) + 15;
         } else if (currentLevelConfig[3] > 0) {
             enemies.add(new Enemies(Color.BLUE));
             currentLevelConfig[3]--;
-            spawnCooldown = 200 / currentLevel;
+            spawnCooldown = (180 / currentLevel) + 20;
         }
 
     }

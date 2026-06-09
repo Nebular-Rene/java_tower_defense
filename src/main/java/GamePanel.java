@@ -24,29 +24,31 @@ public class GamePanel extends JPanel {
         createBackgroundImage();
         markPathOccupied();
 
-        // Buy Tower Button
+        // region Buy Tower Button
         JButton buyTowerButton = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
+                Color frameColor = (logic != null && logic.money >= logic.towerPrice)
+                    ? new Color(50, 200, 100)
+                    : new Color(255, 100, 0);
+                setForeground(frameColor);
+                
                 setText("Buy Tower " + (logic != null ? logic.towerPrice : "?") + "$");
 
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.setColor(new Color(20, 20, 20));
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                Color rahmen = (logic != null && logic.money >= logic.towerPrice)
-                    ? new Color(50, 200, 100)
-                    : new Color(255, 100, 0);
-                g2d.setColor(rahmen);
+                
+                g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2.5f));
-                g2d.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 20, 20);
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
                 g2d.dispose();
                 super.paintComponent(g);
             }
         };
         buyTowerButton.setContentAreaFilled(false);
         buyTowerButton.setBorderPainted(false);
-        buyTowerButton.setForeground(new Color(50, 200, 100));
         buyTowerButton.setFont(new Font("Arial", Font.BOLD, 14));
         buyTowerButton.setFocusPainted(false);
         buyTowerButton.setBounds(645, 5, 150, 30);
@@ -61,14 +63,60 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (placeMode) {
-                    placeMode = false;
                     placeTower(e.getX(), e.getY());
                 }
             }
         });
 
         this.add(buyTowerButton);
+        // endregion
 
+        // region Start/Stop Button
+        JButton startStopButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Color frameColor = (logic != null && logic.money >= logic.towerPrice)
+                    ? new Color(50, 200, 100)
+                    : new Color(255, 100, 0);
+                setForeground(frameColor);
+                
+                setText("Buy Tower " + (logic != null ? logic.towerPrice : "?") + "$");
+
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(new Color(20, 20, 20));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                
+                g2d.setColor(frameColor);
+                g2d.setStroke(new BasicStroke(2.5f));
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2d.dispose();
+                super.paintComponent(g);
+            }
+        };
+        startStopButton.setContentAreaFilled(false);
+        startStopButton.setBorderPainted(false);
+        startStopButton.setFont(new Font("Arial", Font.BOLD, 14));
+        startStopButton.setFocusPainted(false);
+        startStopButton.setBounds(5, 5, 30, 30);
+
+        startStopButton.addActionListener(e -> {
+            if (logic != null && logic.money >= logic.towerPrice) {
+                placeMode = true;
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (placeMode) {
+                    placeTower(e.getX(), e.getY());
+                }
+            }
+        });
+
+        this.add(startStopButton);
+        // endregion
     }
 
     public void setLogic(GameLogic logic) {
@@ -190,6 +238,7 @@ public class GamePanel extends JPanel {
             occupied[gridX][gridY] = true;
             logic.money -= logic.towerPrice;
             logic.towerPrice += 20;
+            placeMode = false;
             System.out.println("placed Tower!");
         }
         else {
