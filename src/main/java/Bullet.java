@@ -9,6 +9,7 @@ class Bullet {
     Color color;
     String type;
     double directionX, directionY;
+    boolean hit = false;
 
     public Bullet(int x, int y, float targetX, float targetY, float speed, Color color, String type) {
         this.x = x;
@@ -33,6 +34,7 @@ class Bullet {
             float distanceY = (Enemies.y) - this.y;
             if (distanceX * distanceX + distanceY * distanceY < 25 * 25) { // Collision radius of 25 pixels
                 Enemies.hit();
+                this.hit = true;
                 return true; // Remove the bullet
             }
         }
