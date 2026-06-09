@@ -5,29 +5,34 @@ import java.util.ArrayList;
 class Tower {
 
     int x, y;
-    Color outerColor;
-    Color innerColor;
+    Color outerColor = Color.RED;
+    Color innerColor = Color.PINK;
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
 
-    public Tower(int x, int y, Color outerColor, Color innerColor, String type) {
+    public Tower(int x, int y, String type) {
         this.x = x;
         this.y = y;
-        this.outerColor = outerColor;
-        this.innerColor = innerColor;
         this.type = type;
+        
         this.cooldown = 0; // Initialize cooldown
     }
 
     public void Upgrade() {
         if (this.type == "Arrow") {
             this.type = "Cannon";
+            outerColor = Color.DARK_GRAY;
+            innerColor = Color.LIGHT_GRAY;
         }
         else if (this.type == "Cannon") {
             this.type = "Magic";
+            outerColor = Color.BLUE;
+            innerColor = Color.YELLOW;
         }
         else if (this.type == "Magic") {
             this.type = "Super";
+            outerColor = Color.CYAN;
+            innerColor = Color.BLACK;
         }
     }
 
@@ -49,7 +54,7 @@ class Tower {
         }
 
         if (first != null) {
-            bullets.add(new Bullet(this.x + 20, this.y + 20, first.x, first.y, 6.7f, Color.RED, this.type));
+            bullets.add(new Bullet(this.x + 15, this.y + 15, first.x, first.y, 6.7f, Color.RED, this.type));
             cooldown = 40; // Reset cooldown
         }
     }

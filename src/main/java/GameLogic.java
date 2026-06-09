@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class GameLogic {
 
@@ -7,25 +8,78 @@ public class GameLogic {
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
     public int money = 0;
+    public int towerPrice = 0;
 
-    private int towerPrice = 0;
+    private int currentLevel = 0;
+    private int spawnCooldown = 0;
+    private int[] currentLevelConfig = {0, 0, 0, 0};
+    private int [][] levels = {
+        {6, 1, 0, 0},
+        {10, 4, 0, 0},
+        {12, 9, 4, 0},
+        {20, 6, 3, 2},
+        {0, 9, 4, 9},
+        {0, 0, 10, 20},
+        {0, 0, 0, 30},
+
+        {6, 1, 0, 0},
+        {10, 4, 0, 0},
+        {12, 9, 4, 0},
+        {20, 6, 3, 2},
+        {0, 9, 4, 9},
+        {0, 0, 10, 20},
+        {0, 0, 0, 30},
+    };
+
     private GamePanel panel;
 
     // constructor
     public GameLogic(GamePanel panel) {
         this.panel = panel;
+    }
 
-        enemies.add(new Enemies(java.awt.Color.RED));
-        enemies.add(new Enemies(java.awt.Color.ORANGE));
-        enemies.add(new Enemies(java.awt.Color.YELLOW));
-        enemies.add(new Enemies(java.awt.Color.BLUE));
+    private boolean levelSpawned() {
+        for (int i = 0; i < currentLevelConfig.length; i++) {
+            if (currentLevelConfig[i] > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        tower.add(new Tower(160, 120, java.awt.Color.BLUE, java.awt.Color.WHITE, "Arrow"));
-        tower.add(new Tower(240, 80, java.awt.Color.BLUE, java.awt.Color.WHITE, "Arrow"));
+    private void spawnLevel() {
+        if (spawnCooldown > 0) {
+            spawnCooldown--;
+            return;
+        }
+
+        if (levelSpawned() && enemies.isEmpty()) {
+            currentLevelConfig = levels[currentLevel];
+            currentLevel++;
+        }
+        if (currentLevelConfig[0] > 0) {
+            enemies.add(new Enemies(Color.RED));
+            currentLevelConfig[0]--;
+            spawnCooldown = 25 / currentLevel;
+        } else if (currentLevelConfig[1] > 0) {
+            enemies.add(new Enemies(Color.ORANGE));
+            currentLevelConfig[1]--;
+            spawnCooldown = 50 / currentLevel;
+        } else if (currentLevelConfig[2] > 0) {
+            enemies.add(new Enemies(Color.YELLOW));
+            currentLevelConfig[2]--;
+            spawnCooldown = 100 / currentLevel;
+        } else if (currentLevelConfig[3] > 0) {
+            enemies.add(new Enemies(Color.BLUE));
+            currentLevelConfig[3]--;
+            spawnCooldown = 200 / currentLevel;
+        }
+
     }
 
     public void start() {
         Timer timer = new Timer(33, e -> {
+            spawnLevel();
             // Gegner bewegen
             for (Enemies enemy : enemies) {
                 enemy.move();
