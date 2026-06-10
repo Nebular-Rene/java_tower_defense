@@ -7,10 +7,11 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 10000000;
+    public int money = 0;
     public int towerPrice = 0;
+    public Timer timer;
 
-    private int currentLevel = 14;
+    private int currentLevel = 0;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {
@@ -78,7 +79,7 @@ public class GameLogic {
     }
 
     public void start() {
-        Timer timer = new Timer(33, e -> {
+        timer = new Timer(33, e -> {
             spawnLevel();
             // Gegner bewegen
             for (Enemy enemy : enemies) {
@@ -86,12 +87,12 @@ public class GameLogic {
             }
             enemies.removeIf(enemy -> enemy.pos.x >= 800 || enemy.pos.y >= 600);
 
-            // Tower schießen
+            // Tower shot
             for (Tower t : tower) {
                 t.shoot(enemies, bullets);
             }
 
-            // Bullets bewegen + Kollision
+            // Bullets movement + collision
             for (int i = bullets.size() - 1; i >= 0; i--) {
                 Bullet bullet = bullets.get(i);
                 bullet.move();
@@ -107,7 +108,6 @@ public class GameLogic {
 
             panel.repaint();
         });
-        timer.start();
     }
 
 }
