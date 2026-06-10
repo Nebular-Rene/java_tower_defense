@@ -7,7 +7,7 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 0;
+    public int money = 9990;
     public int towerPrice = 0;
     public Timer timer;
 
@@ -15,21 +15,14 @@ public class GameLogic {
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {
-        {6, 1, 0, 0},
+        {6, 0, 0, 0},
         {10, 4, 0, 0},
-        {12, 9, 4, 0},
-        {20, 6, 3, 2},
-        {0, 9, 4, 9},
-        {0, 0, 10, 20},
-        {0, 0, 0, 30},
+        // {12, 9, 4, 0},
+        // {20, 6, 3, 2},
+        // {0, 9, 4, 9},
+        // {0, 0, 10, 20},
+        // {0, 0, 0, 30},
 
-        {6, 1, 0, 0},
-        {10, 4, 0, 0},
-        {12, 9, 4, 0},
-        {20, 6, 3, 2},
-        {0, 9, 4, 9},
-        {0, 0, 10, 20},
-        {0, 0, 0, 30},
     };
 
     private GamePanel panel;
@@ -55,6 +48,12 @@ public class GameLogic {
         }
 
         if (levelSpawned() && enemies.isEmpty()) {
+            System.out.println("level: " + currentLevel);
+            System.out.println("länge: " + levels.length);
+            if (currentLevel >= levels.length) {
+                GamePanel.gameOver = true;
+                GamePanel.looseGame = false;
+            }
             currentLevelConfig = levels[currentLevel % levels.length];
             currentLevel++;
         }
@@ -85,7 +84,6 @@ public class GameLogic {
             for (Enemy enemy : enemies) {
                 enemy.move();
             }
-            enemies.removeIf(enemy -> enemy.pos.x >= 800 || enemy.pos.y >= 600);
 
             // Tower shot
             for (Tower t : tower) {

@@ -11,17 +11,19 @@ class Enemy {
     boolean alive = true;
     float progress = 0; // Track the enemy's progress along the path
     int waypointIndex = 0; // Track the current waypoint index for movement
+    boolean gameLoose = false;
 
     static final Vector3d[] WAYPOINTS = {
-        new Vector3d(20, 500, 0), // Start (links außerhalb)
-        new Vector3d(220, 500, 0), // rechts laufen
-        new Vector3d(220, 60, 0),  // hoch
-        new Vector3d(580, 60, 0),  // rechts
-        new Vector3d(580, 220, 0), // runter
-        new Vector3d(460, 220, 0), // links
-        new Vector3d(460, 420, 0), // runter
-        new Vector3d(660, 420, 0), // rechts
-        new Vector3d(660, 620, 0)  // runter (außerhalb = Ziel)
+        new Vector3d(-20, 500, 0), // Start (links outside)
+        new Vector3d(220, 500, 0), // right
+        new Vector3d(220, 60, 0),  // up
+        new Vector3d(580, 60, 0),  // right
+        new Vector3d(580, 220, 0), // down
+        new Vector3d(460, 220, 0), // left
+        new Vector3d(460, 420, 0), // down
+        new Vector3d(660, 420, 0), // right
+        new Vector3d(660, 620, 0),  // down (outside = finish)
+        new Vector3d(0, 0, 0),  // extra waypoint
     };
 
     public Enemy(Color color) {
@@ -53,7 +55,9 @@ class Enemy {
             // Move to the next waypoint
             pos = destination;
             waypointIndex++;
-            if (waypointIndex >= WAYPOINTS.length) {
+            if (waypointIndex >= (WAYPOINTS.length - 1)) {
+                GamePanel.gameOver = true;
+                GamePanel.looseGame = true;
                 alive = false; // Enemy has reached the end of the path
             } else {
                 movement = WAYPOINTS[waypointIndex].cpy().sub(pos).nor().scl(speed);

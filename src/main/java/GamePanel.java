@@ -14,6 +14,9 @@ public class GamePanel extends JPanel {
     private ArrayList<Rectangle> pathRects;
     private int buyPrice = 0;
     private boolean placeMode = false;
+    
+    public static boolean gameOver = false;
+    public static boolean looseGame = false;
 
     private GameLogic logic;
 
@@ -143,7 +146,7 @@ public class GamePanel extends JPanel {
             drawObjects(g);
         }
 
-        // Show Money
+        // region Money Display
         String moneyText = logic.money + "$";
         g.setFont(new Font("Arial", Font.BOLD, 16));
         int textWidth = g.getFontMetrics().stringWidth(moneyText);
@@ -160,8 +163,42 @@ public class GamePanel extends JPanel {
         
         g.setColor(new Color(255, 200, 0)); //goldyellow
         g.drawString(moneyText, x, y);
+        // endregion
+
+        // region Game End Screen
+        if (gameOver) {
+            logic.timer.stop();
+            for (Component c : getComponents()) {
+                c.setVisible(false);
+            }
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            g2d.setColor(new Color(0, 0, 0, 167));
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            
+            g2d.setFont(new Font("Arial", Font.BOLD, 67));
+            String finalText;
+            if (GamePanel.looseGame) {
+                g2d.setColor(new Color(255, 100, 0));
+                finalText = "YOU LOOSE!";
+            } else {
+                g2d.setColor(new Color(50, 200, 100));
+                finalText = "YOU WIN!";
+            }
+            FontMetrics fm = g2d.getFontMetrics();
+            int textX = (getWidth() - fm.stringWidth(finalText)) / 2;
+            int textY = getHeight() / 2;
+            g2d.drawString(finalText, textX, textY);
+            
+            
+            
+            g2d.dispose();
+        }
+        // endregion
 
     }
+
 
     private void drawObjects(Graphics g) {
         for (Tower tower : logic.tower) {
@@ -256,4 +293,5 @@ public class GamePanel extends JPanel {
             System.out.println("Denied Tower placement!");
         }
     }
+
 }
