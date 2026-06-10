@@ -4,8 +4,8 @@
 			"path": "../TowerDefense"
 		},
 		{
-			"name": "java_test_project",
-			"path": "../TowerDefense/java_test_project"
+			"name": "java_tower_defense",
+			"path": "../TowerDefense/"
 		}
 	],
 	"settings": {}
