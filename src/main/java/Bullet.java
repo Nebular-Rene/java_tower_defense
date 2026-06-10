@@ -3,7 +3,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 class Bullet {
-    int x, y;
+    Vector3d pos;
+    Vector3d movement;
     float targetX, targetY;
     float speed;
     Color color;
@@ -11,46 +12,45 @@ class Bullet {
     double directionX, directionY;
     boolean hit = false;
 
-    public Bullet(int x, int y, float targetX, float targetY, float speed, Color color, String type) {
-        this.x = x;
-        this.y = y;
-        this.targetX = targetX;
-        this.targetY = targetY;
+    public Bullet(Vector3d pos, Vector3d destination, float speed, Color color, String type) {
+        this.pos = pos.cpy();
         this.speed = speed;
+        this.movement = destination.cpy().sub(this.pos).nor().scl(this.speed);
         this.color = color;
         this.type = type;
-
-        double distanceX = targetX - x;
-        double distanceY = targetY - y;
-        double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-        this.directionX = distanceX / distance;
-        this.directionY = distanceY / distance;
     }
 
-    public boolean bulletInteraction(ArrayList<Enemies> enemies) {
-        for (Enemies Enemies : enemies) {
-            float distanceX = (Enemies.x) - this.x; // Center of enemy - bullet position
-            float distanceY = (Enemies.y) - this.y;
-            if (distanceX * distanceX + distanceY * distanceY < 25 * 25) { // Collision radius of 25 pixels
-                Enemies.hit();
+    public boolean bulletInteraction(ArrayList<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
+            if (this.pos.dst(enemy.pos)<25) { // Collision radius of 25 pixels
+                enemy.hit();
                 this.hit = true;
                 return true; // Remove the bullet
             }
         }
-        if (targetX >= 800 || targetY >= 600) {
-            return true; // Remove the bullet if it goes off-screen
-        }
-        return false; // Keep the bullet if it didn't hit anything
+        // Remove the bullet if it goes off-screen
+        if (pos.x <= 0)
+            return true;
+        if (pos.x >= 800)
+            return true;
+        if (pos.y <= 0)
+            return true;
+        if (pos.y >= 600)
+            return true;
+        // Keep the bullet if it didn't hit anything
+        return false;
     }
 
     public void move() {
-        x += directionX * speed;
-        y += directionY * speed;
+        pos.add(movement);
     }
 
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillOval(x, y, 8, 8);
+        g.fillOval((int)pos.x, (int)pos.y, 8, 8);
+    }
+
+    public String toString() {
+        return "Bullet[pos:"+pos.toString()+", move:"+movement.toString()+"]";
     }
 }

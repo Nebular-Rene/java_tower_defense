@@ -167,9 +167,9 @@ public class GamePanel extends JPanel {
         for (Tower tower : logic.tower) {
             tower.draw(g);
         }
-        for (Enemies enemy : logic.enemies) {
+        for (Enemy enemy : logic.enemies) {
             enemy.draw(g);
-            }
+        }
         for (Bullet bullet : logic.bullets) {
             bullet.draw(g);
         }
@@ -242,10 +242,9 @@ public class GamePanel extends JPanel {
         }
 
         if (!occupied[gridX][gridY]) {
-            int towerX = gridX * GRID_SIZE;
-            int towerY = gridY * GRID_SIZE;
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
 
-            logic.tower.add(new Tower(towerX, towerY, "Arrow"));
+            logic.tower.add(new Tower(tp, "Arrow"));
             occupied[gridX][gridY] = true;
             logic.money -= logic.towerPrice;
             logic.towerPrice += 20;

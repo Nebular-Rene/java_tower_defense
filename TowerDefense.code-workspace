@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../TowerDefense"
+		},
+		{
+			"name": "java_test_project",
+			"path": "../TowerDefense/java_test_project"
+		}
+	],
+	"settings": {}
+}
