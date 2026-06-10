@@ -9,6 +9,7 @@ public class GameLogic {
     public ArrayList<Bullet> bullets = new ArrayList<>();
     public int money = 0;
     public int towerPrice = 0;
+    public Timer timer;
 
     private int currentLevel = 0;
     private int spawnCooldown = 0;
@@ -78,20 +79,20 @@ public class GameLogic {
     }
 
     public void start() {
-        Timer timer = new Timer(33, e -> {
+        timer = new Timer(33, e -> {
             spawnLevel();
-            // Gegner bewegen
+            // move Enemy
             for (Enemies enemy : enemies) {
                 enemy.move();
             }
             enemies.removeIf(enemy -> enemy.x >= 800 || enemy.y >= 600);
 
-            // Tower schießen
+            // Tower shot
             for (Tower t : tower) {
                 t.shoot(enemies, bullets);
             }
 
-            // Bullets bewegen + Kollision
+            // Bullets movement + collision
             for (int i = bullets.size() - 1; i >= 0; i--) {
                 Bullet bullet = bullets.get(i);
                 bullet.move();
@@ -107,7 +108,6 @@ public class GameLogic {
 
             panel.repaint();
         });
-        timer.start();
     }
 
 }

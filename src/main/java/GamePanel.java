@@ -93,13 +93,13 @@ public class GamePanel extends JPanel {
                 // form
                 g2d.setColor(frameColor);
                 if (playButton) {
-                    int[] xPoints = {8, 8, 22, 22};
-                    int[] yPoints = {7, 7, 15, 15};
-                    g2d.fillPolygon(xPoints, yPoints, 4);
+                    // x, y, width, height, horizontal-, vertical- roundness of corners
+                    g2d.fillRoundRect(6, 6, 24, 24, 8, 8);
+
                 }
                 else {
-                    int[] xPoints = {8, 8, 22};
-                    int[] yPoints = {7, 23, 15};
+                    int[] xPoints = {7, 7, 30};
+                    int[] yPoints = {7, 30, 18};
                     g2d.fillPolygon(xPoints, yPoints, 3);
                 }
                 
@@ -113,14 +113,16 @@ public class GamePanel extends JPanel {
         startStopButton.setBorderPainted(false);
         //startStopButton.setFont(new Font("Arial", Font.BOLD, 1));
         startStopButton.setFocusPainted(false);
-        startStopButton.setBounds(5, 5, 30, 30);
+        startStopButton.setBounds(2, 2, 36, 36);
 
         startStopButton.addActionListener(e -> {
             if (playButton) {
                 playButton = false;
+                logic.timer.stop();
             }
             else {
                 playButton = true;
+                logic.timer.start();
             }
         });
 
@@ -248,6 +250,7 @@ public class GamePanel extends JPanel {
             logic.money -= logic.towerPrice;
             logic.towerPrice += 20;
             placeMode = false;
+            repaint();
             System.out.println("placed Tower!");
         }
         else {
