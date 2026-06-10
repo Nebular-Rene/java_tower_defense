@@ -1,11 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "../TowerDefense"
-		},
-		{
-			"name": "java_tower_defense",
-			"path": "../TowerDefense/"
+			"path": "../java_tower_defense/"
 		}
 	],
 	"settings": {}
