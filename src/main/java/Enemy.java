@@ -1,30 +1,32 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-class Enemies {
+class Enemy {
 
-    float x, y;
+    public Vector3d pos;
+    public Vector3d movement;
+
     float speed;
     Color color;
     boolean alive = true;
     float progress = 0; // Track the enemy's progress along the path
     int waypointIndex = 0; // Track the current waypoint index for movement
 
-    static final int[][] WAYPOINTS = {
-        {-20,  500},  // Start (links außerhalb)
-        {220,  500},  // rechts laufen
-        {220,   60},  // hoch
-        {580,   60},  // rechts
-        {580,  220},  // runter
-        {460,  220},  // links
-        {460,  420},  // runter
-        {660,  420},  // rechts
-        {660,  620},  // runter (außerhalb = Ziel)
+    static final Vector3d[] WAYPOINTS = {
+        new Vector3d(20, 500, 0), // Start (links außerhalb)
+        new Vector3d(220, 500, 0), // rechts laufen
+        new Vector3d(220, 60, 0),  // hoch
+        new Vector3d(580, 60, 0),  // rechts
+        new Vector3d(580, 220, 0), // runter
+        new Vector3d(460, 220, 0), // links
+        new Vector3d(460, 420, 0), // runter
+        new Vector3d(660, 420, 0), // rechts
+        new Vector3d(660, 620, 0)  // runter (außerhalb = Ziel)
     };
 
-    public Enemies(Color color) {
-        this.x = WAYPOINTS[0][0]; // Start x position
-        this.y = WAYPOINTS[0][1]; // Start y position
+    public Enemy(Color color) {
+        this.pos = WAYPOINTS[0].cpy(); // Start y position
+        this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
         this.color = color;
         this.speed = setSpeed();
     }
@@ -43,27 +45,22 @@ class Enemies {
     }
 
     public void move() {
-        progress += speed; // Increment progress to determine movement along the path
-        
-        int targetX = WAYPOINTS[waypointIndex][0];
-        int targetY = WAYPOINTS[waypointIndex][1];
+        Vector3d destination = WAYPOINTS[waypointIndex].cpy();
 
-        float distanceX = targetX - x;
-        float distanceY = targetY - y;
-        float distance = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        double distance = pos.dst(destination);
 
         if (distance < speed) {
             // Move to the next waypoint
-            x = targetX;
-            y = targetY;
+            pos = destination;
             waypointIndex++;
             if (waypointIndex >= WAYPOINTS.length) {
                 alive = false; // Enemy has reached the end of the path
+            } else {
+                movement = WAYPOINTS[waypointIndex].cpy().sub(pos).nor().scl(speed);
             }
         } else {
             // Move towards the current waypoint
-            x += (distanceX / distance) * speed;
-            y += (distanceY / distance) * speed;
+            pos.add(movement);
         }
 
     }
@@ -85,8 +82,8 @@ class Enemies {
 
     public void draw(Graphics g) {
         g.setColor(color);
-        int drawX = (int) x - 15;  // Center the circle at (x, y)
-        int drawY = (int) y - 15;  // Center the circle at (x, y)
+        int drawX = (int) pos.x - 15;  // Center the circle at (x, y)
+        int drawY = (int) pos.y - 15;  // Center the circle at (x, y)
         g.fillOval(drawX, drawY, 30, 30);
     }
 }

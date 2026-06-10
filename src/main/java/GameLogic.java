@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class GameLogic {
 
-    public ArrayList<Enemies> enemies = new ArrayList<>();
+    public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
     public int money = 10000000;
@@ -58,19 +58,19 @@ public class GameLogic {
             currentLevel++;
         }
         if (currentLevelConfig[0] > 0) {
-            enemies.add(new Enemies(Color.RED));
+            enemies.add(new Enemy(Color.RED));
             currentLevelConfig[0]--;
             spawnCooldown = (40 / currentLevel) + 5;
         } else if (currentLevelConfig[1] > 0) {
-            enemies.add(new Enemies(Color.ORANGE));
+            enemies.add(new Enemy(Color.ORANGE));
             currentLevelConfig[1]--;
             spawnCooldown = (80 / currentLevel) + 10;
         } else if (currentLevelConfig[2] > 0) {
-            enemies.add(new Enemies(Color.YELLOW));
+            enemies.add(new Enemy(Color.YELLOW));
             currentLevelConfig[2]--;
             spawnCooldown = (120 / currentLevel) + 15;
         } else if (currentLevelConfig[3] > 0) {
-            enemies.add(new Enemies(Color.BLUE));
+            enemies.add(new Enemy(Color.BLUE));
             currentLevelConfig[3]--;
             spawnCooldown = (180 / currentLevel) + 20;
         }
@@ -81,10 +81,10 @@ public class GameLogic {
         Timer timer = new Timer(33, e -> {
             spawnLevel();
             // Gegner bewegen
-            for (Enemies enemy : enemies) {
+            for (Enemy enemy : enemies) {
                 enemy.move();
             }
-            enemies.removeIf(enemy -> enemy.x >= 800 || enemy.y >= 600);
+            enemies.removeIf(enemy -> enemy.pos.x >= 800 || enemy.pos.y >= 600);
 
             // Tower schießen
             for (Tower t : tower) {
