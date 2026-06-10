@@ -47,6 +47,7 @@ class Enemy {
     }
 
     public void move() {
+        progress += speed;
         Vector3d destination = WAYPOINTS[waypointIndex].cpy();
 
         double distance = pos.dst(destination);

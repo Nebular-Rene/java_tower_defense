@@ -29,13 +29,13 @@ class Bullet {
             }
         }
         // Remove the bullet if it goes off-screen
-        if (pos.x <= 0)
+        if (pos.x <= -10)
             return true;
-        if (pos.x >= 800)
+        if (pos.x >= 810)
             return true;
-        if (pos.y <= 0)
+        if (pos.y <= -10)
             return true;
-        if (pos.y >= 600)
+        if (pos.y >= 610)
             return true;
         // Keep the bullet if it didn't hit anything
         return false;
@@ -48,6 +48,8 @@ class Bullet {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval((int)pos.x, (int)pos.y, 8, 8);
+        g.setColor(Color.BLACK);
+        g.drawRoundRect((int)pos.x, (int)pos.y, 8, 8, 20, 20);
     }
 
     public String toString() {

@@ -12,8 +12,8 @@ public class GamePanel extends JPanel {
     private boolean[][] occupied;
     private BufferedImage backgroundImage;
     private ArrayList<Rectangle> pathRects;
-    private int buyPrice = 0;
     private boolean placeMode = false;
+    private boolean placeSwitchOn = false;
     
     public static boolean gameOver = false;
     public static boolean looseGame = false;
@@ -75,6 +75,38 @@ public class GamePanel extends JPanel {
 
         this.add(buyTowerButton);
         // endregion
+        
+        // region Buy Tower Toggle Switch
+        JToggleButton slideSwitch = new JToggleButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Hintergrund
+                g2d.setColor(new Color(50, 200, 100));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+
+                // Kreis
+                int circleX = isSelected() ? getWidth() - getHeight() + 2 : 2;
+                Color frameColor = (isSelected())
+                    ? new Color(20, 20, 20)
+                    : new Color(50, 200, 100);
+                g2d.setColor(frameColor);
+                g2d.fillOval(circleX, 2, getHeight() - 4, getHeight() - 4);
+
+                placeSwitchOn = isSelected();
+
+                g2d.dispose();
+            }
+        };
+        slideSwitch.setContentAreaFilled(false);
+        slideSwitch.setBorderPainted(false);
+        slideSwitch.setFocusPainted(false);
+        slideSwitch.setBounds(605, 5, 30, 30); // breiter als hoch
+
+        this.add(slideSwitch);
+        // endregion
 
         // region Start/Stop Button
         JButton startStopButton = new JButton() {
@@ -131,6 +163,10 @@ public class GamePanel extends JPanel {
 
         this.add(startStopButton);
         // endregion
+
+        
+
+
     }
 
     public void setLogic(GameLogic logic) {
@@ -285,8 +321,10 @@ public class GamePanel extends JPanel {
             occupied[gridX][gridY] = true;
             logic.money -= logic.towerPrice;
             logic.towerPrice += 20;
-            placeMode = false;
             repaint();
+            if (!placeSwitchOn) {
+                placeMode = false;
+            }
             System.out.println("placed Tower!");
         }
         else {
