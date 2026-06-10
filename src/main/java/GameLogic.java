@@ -7,10 +7,10 @@ public class GameLogic {
     public ArrayList<Enemies> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 10000000;
+    public int money = 0;
     public int towerPrice = 0;
 
-    private int currentLevel = 14;
+    private int currentLevel = 0;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {

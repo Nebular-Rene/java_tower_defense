@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
+    public boolean playButton = false;
+
     private final int GRID_SIZE = 40;
     private boolean[][] occupied;
     private BufferedImage backgroundImage;
@@ -75,43 +77,50 @@ public class GamePanel extends JPanel {
         JButton startStopButton = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
-                Color frameColor = (logic != null && logic.money >= logic.towerPrice)
-                    ? new Color(50, 200, 100)
-                    : new Color(255, 100, 0);
-                setForeground(frameColor);
-                
-                setText("Buy Tower " + (logic != null ? logic.towerPrice : "?") + "$");
-
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // background
                 g2d.setColor(new Color(20, 20, 20));
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                
+
+                // frame
+                Color frameColor = new Color(50, 200, 100);
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                // form
+                g2d.setColor(frameColor);
+                if (playButton) {
+                    int[] xPoints = {8, 8, 22, 22};
+                    int[] yPoints = {7, 7, 15, 15};
+                    g2d.fillPolygon(xPoints, yPoints, 4);
+                }
+                else {
+                    int[] xPoints = {8, 8, 22};
+                    int[] yPoints = {7, 23, 15};
+                    g2d.fillPolygon(xPoints, yPoints, 3);
+                }
+                
+
+
                 g2d.dispose();
-                super.paintComponent(g);
+                // super.paintComponent(g);
             }
         };
         startStopButton.setContentAreaFilled(false);
         startStopButton.setBorderPainted(false);
-        startStopButton.setFont(new Font("Arial", Font.BOLD, 14));
+        //startStopButton.setFont(new Font("Arial", Font.BOLD, 1));
         startStopButton.setFocusPainted(false);
         startStopButton.setBounds(5, 5, 30, 30);
 
         startStopButton.addActionListener(e -> {
-            if (logic != null && logic.money >= logic.towerPrice) {
-                placeMode = true;
+            if (playButton) {
+                playButton = false;
             }
-        });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (placeMode) {
-                    placeTower(e.getX(), e.getY());
-                }
+            else {
+                playButton = true;
             }
         });
 
