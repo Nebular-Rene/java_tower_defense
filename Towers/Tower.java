@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-class Tower {
+abstract class Tower {
 
     public Vector3d pos;
 
@@ -11,21 +11,16 @@ class Tower {
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
 
-    public Tower(Vector3d pos, String type) {
+    public Tower(Vector3d pos, String type, Color color) {
         this.pos = pos;
         this.type = type;
-        if (type == "Arrow") {
-            this.outerColor = Color.RED;
-        } else if (type == "Cannon") {
-            this.outerColor = Color.LIGHT_GRAY;
-        } else if (type == "Magic") {
-            this.outerColor = Color.BLUE;
-        } else if (type == "Super") {
-            this.outerColor = Color.GREEN;
-        }
+        this.outerColor = color;
         
         this.cooldown = 0; // Initialize cooldown
     }
+
+    // functions, all towers need:
+    public abstract void shoot(ArrayList<Enemy> enemies, ArrayList<Bullet> bullets);
 
     public void Upgrade() {
         if (this.type == "Arrow") {
@@ -45,28 +40,7 @@ class Tower {
         }
     }
 
-    public void shoot(ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
-        if (cooldown > 0) {
-            cooldown--;
-            return;
-        }
-
-        Enemy first = null; // Track the first enemy in range
-        for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 160;
-            boolean firstEnemy = first == null || enemy.progress > first.progress;
-            if (inRange && firstEnemy) {
-                first = enemy;
-            }
-        }
-
-        if (first != null) {
-            Vector3d p = pos.cpy().add(20, 20,0);
-            // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, 6.7f, Color.RED, this.type));
-            cooldown = 40; // Reset cooldown
-        }
-    }
+    
 
     // not yet used
     private Vector3d getAimSpot(Enemy enemy, double bulletSpeed) {

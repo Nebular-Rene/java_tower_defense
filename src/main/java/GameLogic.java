@@ -7,7 +7,7 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 10;
+    public int money = 0;
     public int towerPrice = 0;
     public Timer timer;
 
@@ -107,7 +107,6 @@ public class GameLogic {
             for (Tower t : tower) {
                 t.shoot(enemies, bullets);
             }
-            money *= 1.2;
 
             // Bullets movement + collision
             for (int i = bullets.size() - 1; i >= 0; i--) {

@@ -6,9 +6,11 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
+    // private static final Color BUTTON_COLOR = 
+
     public boolean playButton = false;
 
-    private final int GRID_SIZE = 40;
+    private static final int GRID_SIZE = 40;
     private boolean[][] occupied;
     private BufferedImage backgroundImage;
     private ArrayList<Rectangle> pathRects;
@@ -309,8 +311,15 @@ public class GamePanel extends JPanel {
 
         if (!occupied[gridX][gridY] && logic.money >= logic.towerPrice) {
             Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
-
-            logic.tower.add(new Tower(tp, activeTower));
+            if (activeTower == "Arrow") {
+                logic.tower.add(new ArrowTower(tp));
+            } else if (activeTower == "Cannon") {
+                logic.tower.add(new CannonTower(tp));
+            } else if (activeTower == "Magic") {
+                logic.tower.add(new MagicTower(tp));
+            } else if (activeTower == "Super") {
+                logic.tower.add(new SuperTower(tp));
+            }
             occupied[gridX][gridY] = true;
             logic.money -= logic.towerPrice;
             logic.towerPrice += 20;
