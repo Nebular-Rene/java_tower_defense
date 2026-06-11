@@ -7,7 +7,7 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 22220;
+    public int money = 0;
     public int towerPrice = 0;
     public Timer timer;
 
@@ -16,18 +16,27 @@ public class GameLogic {
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {
         {9, 0, 0, 0}, // red, orange, yellow, blue
-        {6, 0, 0, 0},
-        {7, 1, 0, 0},
-        {4, 2, 0, 0},
+        {11, 0, 0, 0},
+        {5, 1, 0, 0},
+        {9, 1, 0, 0},
+        {25, 0, 0, 0},
+        {12, 2, 0, 0},
+        {0, 12, 0, 0},
+        {9, 0, 0, 0},
+        {10, 10, 0, 0},
+        {12, 3, 1, 0},
         {8, 4, 1, 0},
+        {18, 8, 0, 0},
         {10, 6, 2, 0},
         {22, 4, 1, 0},
-        {0, 9, 4, 2},
-        {15, 8, 4, 3},
+        {0, 9, 3, 0},
+        {0, 0, 0, 2},
+        {15, 0, 0, 3},
+        {5, 8, 4, 3},
         {1, 3, 6, 7},
         {0, 6, 7, 9},
         {6, 7, 6, 7},
-        {6, 7, 0, 67},
+        {6, 7, 67, 0},
         {0, 0, 0, 1},
         {0, 0, 1, 1},
         {0, 1, 1, 1},
@@ -69,19 +78,19 @@ public class GameLogic {
         if (currentLevelConfig[0] > 0) {
             enemies.add(new Enemy(Color.RED));
             currentLevelConfig[0]--;
-            spawnCooldown = (40 / currentLevel) + 5;
+            spawnCooldown = (400 / (currentLevel + 10)) + 10;
         } else if (currentLevelConfig[1] > 0) {
             enemies.add(new Enemy(Color.ORANGE));
             currentLevelConfig[1]--;
-            spawnCooldown = (80 / currentLevel) + 10;
+            spawnCooldown = (600 / (currentLevel + 10)) + 10;
         } else if (currentLevelConfig[2] > 0) {
             enemies.add(new Enemy(Color.YELLOW));
             currentLevelConfig[2]--;
-            spawnCooldown = (120 / currentLevel) + 15;
+            spawnCooldown = (800 / (currentLevel + 10)) + 10;
         } else if (currentLevelConfig[3] > 0) {
             enemies.add(new Enemy(Color.BLUE));
             currentLevelConfig[3]--;
-            spawnCooldown = (180 / currentLevel) + 20;
+            spawnCooldown = (1000 / (currentLevel + 10)) + 10;
         }
 
     }

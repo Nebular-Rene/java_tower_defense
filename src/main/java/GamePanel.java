@@ -314,7 +314,7 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        if (!occupied[gridX][gridY]) {
+        if (!occupied[gridX][gridY] && logic.money >= logic.towerPrice) {
             Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
 
             logic.tower.add(new Tower(tp, "Arrow"));

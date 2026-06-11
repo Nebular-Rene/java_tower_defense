@@ -23,7 +23,7 @@ class Enemy {
         new Vector3d(460, 420, 0), // down
         new Vector3d(660, 420, 0), // right
         new Vector3d(660, 620, 0),  // down (outside = finish)
-        new Vector3d(0, 0, 0),  // extra waypoint
+        new Vector3d(0, 0, 0),  // extra waypoint - might not be too clean but it works ;)
     };
 
     public Enemy(Color color) {
@@ -43,7 +43,7 @@ class Enemy {
         } else if (color == Color.BLUE) {
             return 3f;
         }
-        return 1f; // Default speed
+        return 1f; // Default speed - shouldnt exist btw
     }
 
     public void move() {
