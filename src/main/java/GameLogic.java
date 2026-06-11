@@ -7,7 +7,7 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 0;
+    public int money = 10;
     public int towerPrice = 0;
     public Timer timer;
 
@@ -15,11 +15,11 @@ public class GameLogic {
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
     private int [][] levels = {
-        {9, 0, 0, 0}, // red, orange, yellow, blue
-        {11, 0, 0, 0},
+        {5, 0, 0, 0}, // red, orange, yellow, blue
+        {9, 0, 0, 0},
         {5, 1, 0, 0},
-        {9, 1, 0, 0},
-        {25, 0, 0, 0},
+        {8, 1, 0, 0},
+        {14, 0, 0, 0},
         {12, 2, 0, 0},
         {0, 12, 0, 0},
         {9, 0, 0, 0},
@@ -107,6 +107,7 @@ public class GameLogic {
             for (Tower t : tower) {
                 t.shoot(enemies, bullets);
             }
+            money *= 1.2;
 
             // Bullets movement + collision
             for (int i = bullets.size() - 1; i >= 0; i--) {
