@@ -31,12 +31,18 @@ public class GamePanel extends JPanel {
         initPathRects();
         createBackgroundImage();
         markPathOccupied();
+        markMenuOccupied();
         
         // region Arrow Tower Button
-        JButton buyArrowTowerButton = menuBuyTowerButton(Color.RED);
+        JButton buyArrowTowerButton = menuBuyTowerButton(Color.RED, "Arrow");
         buyArrowTowerButton.setBounds(655, 45, 130, 30);
         buyArrowTowerButton.addActionListener(e -> {
-            placeMode = !placeMode;
+            if (activeTower == "Arrow") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
             if (placeMode) {
                 activeTower = "Arrow";
             }
@@ -44,7 +50,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Arrow") {
+                if (activeTower == "Arrow" && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -53,10 +59,15 @@ public class GamePanel extends JPanel {
         // endregion
 
         // region Cannon Tower Button
-        JButton buyCannonTowerButton = menuBuyTowerButton(Color.LIGHT_GRAY);
+        JButton buyCannonTowerButton = menuBuyTowerButton(Color.LIGHT_GRAY, "Cannon");
         buyCannonTowerButton.setBounds(655, 85, 130, 30);
         buyCannonTowerButton.addActionListener(e -> {
-            placeMode = !placeMode;
+            if (activeTower == "Cannon") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
             if (placeMode) {
                 activeTower = "Cannon";
             }
@@ -64,7 +75,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Cannon") {
+                if (activeTower == "Cannon" && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -73,10 +84,15 @@ public class GamePanel extends JPanel {
         // endregion
 
         // region Magic Tower Button
-        JButton buyMagicTowerButton = menuBuyTowerButton(Color.BLUE);
+        JButton buyMagicTowerButton = menuBuyTowerButton(Color.BLUE, "Magic");
         buyMagicTowerButton.setBounds(655, 125, 130, 30);
         buyMagicTowerButton.addActionListener(e -> {
-            placeMode = !placeMode;
+            if (activeTower == "Magic") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
             if (placeMode) {
                 activeTower = "Magic";
             }
@@ -84,7 +100,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Magic") {
+                if (activeTower == "Magic" && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -93,10 +109,15 @@ public class GamePanel extends JPanel {
         // endregion
 
         // region Super Tower Button
-        JButton buySuperTowerButton = menuBuyTowerButton(Color.GREEN);
+        JButton buySuperTowerButton = menuBuyTowerButton(Color.GREEN, "Super");
         buySuperTowerButton.setBounds(655, 165, 130, 30);
         buySuperTowerButton.addActionListener(e -> {
-            placeMode = !placeMode;
+            if (activeTower == "Super") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
             if (placeMode) {
                 activeTower = "Super";
             }
@@ -104,7 +125,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Super") {
+                if (activeTower == "Super" && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -276,6 +297,21 @@ public class GamePanel extends JPanel {
         }
     }
 
+    private void markMenuOccupied() {
+        int startCol = 640 / GRID_SIZE;
+        int endCol = 800 / GRID_SIZE;
+        int startRow = 0; // starting at 0
+        int endRow = 6; // six blocks down
+
+        for (int col = startCol; col < endCol; col++) {
+            for (int row = startRow; row < endRow; row++) {
+                occupied[col][row] = true;
+            }
+        }
+        // also the Start/Stop Button
+        occupied[0][0] = true;
+    }
+
     private void drawGrid(Graphics g) {
         g.setColor(new Color(0, 0, 0, 30));
         for (int x = 0; x < 800; x += GRID_SIZE) {
@@ -397,7 +433,7 @@ public class GamePanel extends JPanel {
     // endregion
 
     // region Button layouts
-    private JButton menuBuyTowerButton(Color outerColor) {
+    private JButton menuBuyTowerButton(Color outerColor, String towerKind) {
         JButton button = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -405,7 +441,7 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // Background
-                if (placeMode) {
+                if (placeMode && activeTower == towerKind) {
                     g2d.setColor(Color.DARK_GRAY);
                     g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
                 }
@@ -434,6 +470,7 @@ public class GamePanel extends JPanel {
                 g2d.drawString(text, textX, textY);
 
                 g2d.dispose();
+                repaint();
             }
         };
         button.setContentAreaFilled(false);
