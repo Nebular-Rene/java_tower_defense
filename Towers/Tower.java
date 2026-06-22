@@ -1,5 +1,8 @@
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 abstract class Tower {
@@ -10,11 +13,13 @@ abstract class Tower {
     Color innerColor = Color.WHITE;
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
+    int range;
 
-    public Tower(Vector3d pos, String type, Color color) {
+    public Tower(Vector3d pos, String type, Color color, int range) {
         this.pos = pos;
         this.type = type;
         this.outerColor = color;
+        this.range = range;
         
         this.cooldown = 0; // Initialize cooldown
     }
@@ -43,7 +48,7 @@ abstract class Tower {
     
 
     // not yet used
-    private Vector3d getAimSpot(Enemy enemy, double bulletSpeed) {
+    public Vector3d getAimSpot(Enemy enemy, double bulletSpeed) {
         Vector3d totarget = this.pos.cpy().sub(enemy.pos);
 
         double a = enemy.movement.dot(enemy.movement) - (bulletSpeed * bulletSpeed);
@@ -67,6 +72,24 @@ abstract class Tower {
         }
 
         return enemy.pos.cpy().add(enemy.movement).scl(t);
+    }
+
+    public void drawRange(Graphics g) {
+        if (g instanceof Graphics2D) {
+            Graphics2D g2d = (Graphics2D) g;
+            Composite oldComposite = g2d.getComposite();
+            Color oldColor = g2d.getColor();
+
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+            g2d.setColor(new Color(255, 255, 255));
+            int centerX = (int) pos.x + 20;
+            int centerY = (int) pos.y + 20;
+            int diameter = range * 2;
+            g2d.fillOval(centerX - range, centerY - range, diameter, diameter);
+
+            g2d.setComposite(oldComposite);
+            g2d.setColor(oldColor);
+        }
     }
 
     public void draw(Graphics g) {

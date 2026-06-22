@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class SuperTower extends Tower {
     
     public SuperTower(Vector3d pos) {
-        super(pos, "Arrow", Color.GREEN);
+        super(pos, "Super", Color.GREEN, 100);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class SuperTower extends Tower {
 
         Enemy first = null; // Track the first enemy in range
         for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 80;
+            boolean inRange = pos.dst(enemy.pos) < 100;
             boolean firstEnemy = first == null || enemy.progress > first.progress;
             if (inRange && firstEnemy) {
                 first = enemy;

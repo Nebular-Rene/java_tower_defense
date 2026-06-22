@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class ArrowTower extends Tower {
 
     public ArrowTower(Vector3d pos) {
-        super(pos, "Arrow", Color.RED);
+        super(pos, "Arrow", Color.RED, 150);
     }
 
     @Override

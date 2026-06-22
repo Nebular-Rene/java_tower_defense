@@ -254,6 +254,9 @@ public class GamePanel extends JPanel {
 
     private void drawObjects(Graphics g) {
         for (Tower tower : logic.tower) {
+            tower.drawRange(g);
+        }
+        for (Tower tower : logic.tower) {
             tower.draw(g);
         }
         for (Enemy enemy : logic.enemies) {
@@ -345,20 +348,29 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        if (!occupied[gridX][gridY] && logic.money >= logic.towerPrice) {
+        if (!occupied[gridX][gridY]) {
             Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
-            if (activeTower == "Arrow") {
+            if (activeTower == "Arrow" && logic.money >= logic.towerPriceArrow) {
                 logic.tower.add(new ArrowTower(tp));
-            } else if (activeTower == "Cannon") {
+                logic.money -= logic.towerPriceArrow;
+                logic.towerPriceArrow += 20;
+            } else if (activeTower == "Cannon" && logic.money >= logic.towerPriceCannon) {
                 logic.tower.add(new CannonTower(tp));
-            } else if (activeTower == "Magic") {
+                logic.money -= logic.towerPriceCannon;
+                logic.towerPriceCannon += 30;
+            } else if (activeTower == "Magic" && logic.money >= logic.towerPriceMagic) {
                 logic.tower.add(new MagicTower(tp));
-            } else if (activeTower == "Super") {
+                logic.money -= logic.towerPriceMagic;
+                logic.towerPriceMagic += 50;
+            } else if (activeTower == "Super" && logic.money >= logic.towerPriceSuper) {
                 logic.tower.add(new SuperTower(tp));
+                logic.money -= logic.towerPriceSuper;
+                logic.towerPriceSuper += 80;
+            } else {
+                System.out.println("no money broke boyyyy");
+                return;
             }
             occupied[gridX][gridY] = true;
-            logic.money -= logic.towerPrice;
-            logic.towerPrice += 20;
             repaint();
             if (!placeSwitchOn) {
                 placeMode = false;
@@ -440,6 +452,9 @@ public class GamePanel extends JPanel {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+                // Get current price dynamically from logic
+                int currentPrice = getCurrentTowerPrice(towerKind);
+
                 // Background
                 if (placeMode && activeTower == towerKind) {
                     g2d.setColor(Color.DARK_GRAY);
@@ -447,7 +462,7 @@ public class GamePanel extends JPanel {
                 }
 
                 // Frame
-                Color frameColor = (logic != null && logic.money >= logic.towerPrice)
+                Color frameColor = (logic != null && logic.money >= currentPrice)
                     ? new Color(50, 200, 100) // green
                     : new Color(255, 100, 0); // orange
                 g2d.setColor(frameColor);
@@ -461,7 +476,7 @@ public class GamePanel extends JPanel {
                 g2d.fillOval(12, 10, 10, 10);
 
                 // Text right-aligned
-                String text = (logic != null ? logic.towerPrice : "?") + "$";
+                String text = currentPrice + "$";
                 g2d.setFont(getFont());
                 g2d.setColor(frameColor);
                 FontMetrics fm = g2d.getFontMetrics();
@@ -483,4 +498,21 @@ public class GamePanel extends JPanel {
     // endregion
 
     // endregion
+
+    // Helper method to get current tower price
+    private int getCurrentTowerPrice(String towerType) {
+        if (logic == null) return 0;
+        switch (towerType) {
+            case "Arrow":
+                return logic.towerPriceArrow;
+            case "Cannon":
+                return logic.towerPriceCannon;
+            case "Magic":
+                return logic.towerPriceMagic;
+            case "Super":
+                return logic.towerPriceSuper;
+            default:
+                return 0;
+        }
+    }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class MagicTower extends Tower {
     
     public MagicTower(Vector3d pos) {
-        super(pos, "Arrow", Color.BLUE);
+        super(pos, "Magic", Color.BLUE, 123);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class MagicTower extends Tower {
 
         Enemy first = null; // Track the first enemy in range
         for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 167;
+            boolean inRange = pos.dst(enemy.pos) < 123;
             boolean firstEnemy = first == null || enemy.progress > first.progress;
             if (inRange && firstEnemy) {
                 first = enemy;
@@ -26,8 +26,8 @@ public class MagicTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, 5f, Color.RED, 20, 6));
-            cooldown = 100; // Reset cooldown
+            bullets.add(new Bullet(p, first.pos, 4.5f, Color.RED, 20, 6));
+            cooldown = 250; // Reset cooldown
         }
     }  
 }

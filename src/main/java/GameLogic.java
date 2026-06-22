@@ -10,9 +10,9 @@ public class GameLogic {
     public int money = 0;
     public int towerPrice = 0;
     public int towerPriceArrow = 0;
-    public int towerPriceCannon = 0;
-    public int towerPriceMagic = 0;
-    public int towerPriceSuper = 0;
+    public int towerPriceCannon = 30;
+    public int towerPriceMagic = 50;
+    public int towerPriceSuper = 80;
     public Timer timer;
 
     private int currentLevel = 0;

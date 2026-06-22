@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class CannonTower extends Tower {
     
     public CannonTower(Vector3d pos) {
-        super(pos, "Arrow", Color.LIGHT_GRAY);
+        super(pos, "Cannon", Color.LIGHT_GRAY, 167);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class CannonTower extends Tower {
 
         Enemy first = null; // Track the first enemy in range
         for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 200;
+            boolean inRange = pos.dst(enemy.pos) < 167;
             boolean firstEnemy = first == null || enemy.progress > first.progress;
             if (inRange && firstEnemy) {
                 first = enemy;
