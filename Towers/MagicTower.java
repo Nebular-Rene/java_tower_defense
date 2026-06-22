@@ -16,7 +16,7 @@ public class MagicTower extends Tower {
 
         Enemy first = null; // Track the first enemy in range
         for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 160;
+            boolean inRange = pos.dst(enemy.pos) < 167;
             boolean firstEnemy = first == null || enemy.progress > first.progress;
             if (inRange && firstEnemy) {
                 first = enemy;
@@ -26,8 +26,8 @@ public class MagicTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, 6.7f, Color.RED, this.type));
-            cooldown = 40; // Reset cooldown
+            bullets.add(new Bullet(p, first.pos, 5f, Color.RED, 20, 6));
+            cooldown = 100; // Reset cooldown
         }
     }  
 }

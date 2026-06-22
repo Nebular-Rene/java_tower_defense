@@ -7,8 +7,12 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 111110;
+    public int money = 0;
     public int towerPrice = 0;
+    public int towerPriceArrow = 0;
+    public int towerPriceCannon = 0;
+    public int towerPriceMagic = 0;
+    public int towerPriceSuper = 0;
     public Timer timer;
 
     private int currentLevel = 0;
@@ -96,7 +100,7 @@ public class GameLogic {
     }
 
     public void start() {
-        timer = new Timer(33, e -> {
+        timer = new Timer(15, e -> {
             spawnLevel();
             // Gegner bewegen
             for (Enemy enemy : enemies) {
