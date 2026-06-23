@@ -140,11 +140,11 @@ public class GamePanel extends JPanel {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Hintergrund
+                // Background
                 g2d.setColor(new Color(50, 200, 100));
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
 
-                // Kreis
+                // Circle
                 int circleX = isSelected() ? getWidth() - getHeight() + 2 : 2;
                 Color frameColor = (isSelected())
                     ? new Color(20, 20, 20)
@@ -163,6 +163,143 @@ public class GamePanel extends JPanel {
         slideSwitch.setBounds(650, 10, 20, 20); // breiter als hoch
 
         this.add(slideSwitch);
+        // endregion
+
+        // region Upgrade Button
+        JButton upgradeButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Background
+                if (placeMode && activeTower == "upgradeButton") {
+                    g2d.setColor(Color.DARK_GRAY);
+                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                }
+
+                // Arrow
+                g2d.setColor(new Color(50, 200, 100));
+                int[] xPoints = {11, 7, 15};
+                int[] yPoints = {7, 16, 16};
+                g2d.fillPolygon(xPoints, yPoints, 3);
+
+                // Frame
+                Color frameColor = (logic != null && logic.money >= 50)
+                    ? new Color(50, 200, 100) // green
+                    : new Color(255, 100, 0); // orange
+                g2d.setColor(frameColor);
+                g2d.setStroke(new BasicStroke(2f));
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                // Text right-aligned
+                String text = "50 $";
+                g2d.setFont(getFont());
+                g2d.setColor(frameColor);
+                FontMetrics fm = g2d.getFontMetrics();
+                int textX = getWidth() - fm.stringWidth(text) - 10;
+                int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+                g2d.drawString(text, textX, textY);
+
+                g2d.dispose();
+                repaint();
+            }
+        };
+        upgradeButton.setContentAreaFilled(false);
+        upgradeButton.setBorderPainted(false);
+        upgradeButton.setFocusPainted(false);
+        upgradeButton.setFont(new Font("Arial", Font.BOLD, 14));
+        upgradeButton.setForeground(new Color(50, 200, 100));
+        upgradeButton.setBounds(655, 205, 60, 25);
+        upgradeButton.addActionListener(e -> {
+            if (activeTower == "upgradeButton") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
+            if (placeMode) {
+                activeTower = "upgradeButton";
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (activeTower == "upgradeButton" && placeMode) {
+                    // upgrade logic can be put heree lol
+                    System.out.println("upgrade logic");
+                    upgradeTower(e.getX(), e.getY());
+                }
+            }
+        });
+        this.add(upgradeButton);
+
+        // endregion
+
+        // region Sell Button
+        JButton sellButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Background
+                if (placeMode && activeTower == "sellButton") {
+                    g2d.setColor(Color.DARK_GRAY);
+                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                }
+
+                // Arrow
+                g2d.setColor(new Color(255, 100, 0));
+                int[] xPoints = {11, 7, 15};
+                int[] yPoints = {16, 7, 7};
+                g2d.fillPolygon(xPoints, yPoints, 3);
+
+                // Frame
+                Color frameColor = Color.LIGHT_GRAY;
+                g2d.setColor(frameColor);
+                g2d.setStroke(new BasicStroke(2f));
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                // Text right-aligned
+                String text = "50 $";
+                g2d.setFont(getFont());
+                g2d.setColor(frameColor);
+                FontMetrics fm = g2d.getFontMetrics();
+                int textX = getWidth() - fm.stringWidth(text) - 10;
+                int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+                g2d.drawString(text, textX, textY);
+
+                g2d.dispose();
+                repaint();
+            }
+        };
+        sellButton.setContentAreaFilled(false);
+        sellButton.setBorderPainted(false);
+        sellButton.setFocusPainted(false);
+        sellButton.setFont(new Font("Arial", Font.BOLD, 14));
+        sellButton.setForeground(new Color(50, 200, 100));
+        sellButton.setBounds(725, 205, 60, 25);
+        sellButton.addActionListener(e -> {
+            if (activeTower == "sellButton") {
+                placeMode = !placeMode;
+            }
+            else {
+                placeMode = true;
+            }
+            if (placeMode) {
+                activeTower = "sellButton";
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (activeTower == "sellButton" && placeMode) {
+                    sellTower(e.getX(), e.getY());
+                }
+            }
+        });
+        this.add(sellButton);
         // endregion
 
         // region Start/Stop Button
@@ -220,9 +357,6 @@ public class GamePanel extends JPanel {
 
         this.add(startStopButton);
         // endregion
-
-        
-
 
     }
 
@@ -285,6 +419,8 @@ public class GamePanel extends JPanel {
         g2d.dispose();
     }
 
+    // region mark Occupied Space
+
     private void markPathOccupied() {
         for (int x = 0; x < 800 / GRID_SIZE; x++) {
             for (int y = 0; y < 600 / GRID_SIZE; y++) {
@@ -314,6 +450,8 @@ public class GamePanel extends JPanel {
         // also the Start/Stop Button
         occupied[0][0] = true;
     }
+
+    // endregion
 
     private void drawGrid(Graphics g) {
         g.setColor(new Color(0, 0, 0, 30));
@@ -382,6 +520,46 @@ public class GamePanel extends JPanel {
         }
     }
 
+    private void sellTower(int mouseX, int mouseY) {
+        int gridX = mouseX / GRID_SIZE;
+        int gridY = mouseY / GRID_SIZE;
+
+        if (occupied[gridX][gridY]) {
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
+            for (Tower t : logic.tower) {
+                // looks for identical position
+                if (t.pos.idt(tp)) {
+                    logic.money += 50;
+                    logic.tower.remove(t);
+                    occupied[gridX][gridY] = false;
+                    repaint();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void upgradeTower(int mouseX, int mouseY) {
+        int gridX = mouseX / GRID_SIZE;
+        int gridY = mouseY / GRID_SIZE;
+
+        if (occupied[gridX][gridY]) {
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
+            for (Tower t : logic.tower) {
+                // looks for identical position
+                if (t.pos.idt(tp)) {
+                    if (logic.money >= 50) {
+                        if (t.Upgrade()) {
+                            logic.money -= 50;
+                            repaint();
+                        }
+                    }                    
+                    break;
+                }
+            }
+        }
+    }
+
     // region Game End Screen
     private void GameEndScreen(Graphics2D g2d) {
         logic.timer.stop();
@@ -415,7 +593,7 @@ public class GamePanel extends JPanel {
 
     // region Menu Background
     private void drawMenuBackground(Graphics2D g2d) {
-        int x = 645, y = 5, w = 150, h = 230, arc = 20;
+        int x = 645, y = 4, w = 150, h = 233, arc = 20;
         
         Color frameColor = Color.BLUE;
 

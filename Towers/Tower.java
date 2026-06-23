@@ -8,13 +8,20 @@ import java.util.ArrayList;
 abstract class Tower {
 
     public Vector3d pos;
+    public boolean alive = true;
 
     Color outerColor;
     Color innerColor = Color.WHITE;
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
     int range;
-
+    
+    float bulletSpeed = 1f;
+    int bulletSize = 7;
+    int bulletHealth = 1;
+    int cooldownTime = 40;
+    int innerColorRGB = 250;
+    
     public Tower(Vector3d pos, String type, Color color, int range) {
         this.pos = pos;
         this.type = type;
@@ -27,25 +34,7 @@ abstract class Tower {
     // functions, all towers need:
     public abstract void shoot(ArrayList<Enemy> enemies, ArrayList<Bullet> bullets);
 
-    public void Upgrade() {
-        if (this.type == "Arrow") {
-            this.type = "Cannon";
-            this.outerColor = Color.DARK_GRAY;
-            innerColor = Color.LIGHT_GRAY;
-        }
-        else if (this.type == "Cannon") {
-            this.type = "Magic";
-            this.outerColor = Color.BLUE;
-            innerColor = Color.YELLOW;
-        }
-        else if (this.type == "Magic") {
-            this.type = "Super";
-            this.outerColor = Color.CYAN;
-            innerColor = Color.BLACK;
-        }
-    }
-
-    
+    public abstract boolean Upgrade();
 
     // not yet used
     public Vector3d getAimSpot(Enemy enemy, double bulletSpeed) {
@@ -80,7 +69,7 @@ abstract class Tower {
             Composite oldComposite = g2d.getComposite();
             Color oldColor = g2d.getColor();
 
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f));
             g2d.setColor(new Color(255, 255, 255));
             int centerX = (int) pos.x + 20;
             int centerY = (int) pos.y + 20;

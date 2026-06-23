@@ -5,6 +5,12 @@ public class MagicTower extends Tower {
     
     public MagicTower(Vector3d pos) {
         super(pos, "Magic", Color.BLUE, 123);
+        this.bulletSpeed = 4.5f;
+        this.innerColor = Color.WHITE;
+        this.innerColorRGB = 250;
+        this.bulletSize = 20;
+        this.bulletHealth = 6;
+        this.cooldownTime = 250;
     }
 
     @Override
@@ -26,8 +32,21 @@ public class MagicTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, 4.5f, Color.RED, 20, 6));
-            cooldown = 250; // Reset cooldown
+            bullets.add(new Bullet(p, first.pos, 4.5f, Color.RED, 20, this.bulletHealth));
+            cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
+
+    @Override
+    public boolean Upgrade() {
+        if (this.innerColorRGB > 0) {
+            this.innerColorRGB -= 25;
+            this.cooldownTime -= 10;
+            this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
+            this.bulletSpeed += 0.15f;
+            this.bulletHealth += 1;
+            return true;
+        }
+        return false;        
+    }
 }

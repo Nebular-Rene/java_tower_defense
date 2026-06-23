@@ -82,25 +82,25 @@ public class GameLogic {
         if (currentLevelConfig[0] > 0) {
             enemies.add(new Enemy(Color.RED));
             currentLevelConfig[0]--;
-            spawnCooldown = (400 / (currentLevel + 10)) + 10;
+            spawnCooldown = (200 / (currentLevel + 10)) + 5;
         } else if (currentLevelConfig[1] > 0) {
             enemies.add(new Enemy(Color.ORANGE));
             currentLevelConfig[1]--;
-            spawnCooldown = (600 / (currentLevel + 10)) + 10;
+            spawnCooldown = (400 / (currentLevel + 10)) + 5;
         } else if (currentLevelConfig[2] > 0) {
             enemies.add(new Enemy(Color.YELLOW));
             currentLevelConfig[2]--;
-            spawnCooldown = (800 / (currentLevel + 10)) + 10;
+            spawnCooldown = (600 / (currentLevel + 10)) + 5;
         } else if (currentLevelConfig[3] > 0) {
             enemies.add(new Enemy(Color.BLUE));
             currentLevelConfig[3]--;
-            spawnCooldown = (1000 / (currentLevel + 10)) + 10;
+            spawnCooldown = (800 / (currentLevel + 10)) + 5;
         }
 
     }
 
     public void start() {
-        timer = new Timer(15, e -> {
+        timer = new Timer(33, e -> {
             spawnLevel();
             // Gegner bewegen
             for (Enemy enemy : enemies) {

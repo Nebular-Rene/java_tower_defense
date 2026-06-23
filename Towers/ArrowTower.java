@@ -5,6 +5,12 @@ public class ArrowTower extends Tower {
 
     public ArrowTower(Vector3d pos) {
         super(pos, "Arrow", Color.RED, 150);
+        this.bulletSpeed = 6.7f;
+        this.innerColor = Color.WHITE;
+        this.innerColorRGB = 250;
+        this.bulletSize = 7;
+        this.bulletHealth = 1;
+        this.cooldownTime = 40;        
     }
 
     @Override
@@ -26,8 +32,21 @@ public class ArrowTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, 6.7f, Color.WHITE, 7, 1));
-            cooldown = 40; // Reset cooldown
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, 7, 1));
+            cooldown = this.cooldownTime; // Reset cooldown
         }
-    }   
+    }  
+    
+    @Override
+    public boolean Upgrade() {
+        if (this.innerColorRGB > 0) {
+            this.innerColorRGB -= 25;
+            this.cooldownTime -= 3;
+            this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
+            this.bulletSpeed += 0.13f;
+            this.range += 3;
+            return true;
+        }
+        return false;        
+    }
 }
