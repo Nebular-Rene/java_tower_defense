@@ -12,38 +12,38 @@ public class GameLogic {
     public int money = 0;
     public int towerPrice = 0;
     public int towerPriceArrow = 0;
-    public int towerPriceCannon = 30;
-    public int towerPriceMagic = 50;
+    public int towerPriceCannon = 40;
+    public int towerPriceMagic = 60;
     public int towerPriceSuper = 80;
     public Timer timer;
     public int timerSpeed = 33;
+    public int currentLevel = 0;
 
     private ArrayList<Color> spawnQueue = new ArrayList<>();
     private Random random = new Random();
-    private int currentLevel = 0;
     private boolean increaseLevel = true;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0};
-    private int [][] levels = {
+    public int [][] levels = {
         // skip first level, cause i`m sloppy
         {}, // red, orange, yellow, blue
-        {4, 0, 0, 0},      // lvl 1
+        {4, 0, 0, 0},       // lvl 1
         {6, 0, 0, 0},       // lvl 2
         {7, 0, 0, 0},       // lvl 3
-        {3, 1, 0, 0},       // lvl 4
-        {2, 2, 0, 0},       // lvl 5
-        {5, 1, 0, 0},       // lvl 6
-        {8, 1, 0, 0},       // lvl 7
-        {16, 1, 0, 0},      // lvl 8
-        {14, 0, 0, 0},      // lvl 9
-        {12, 2, 0, 0},      // lvl 10
-        {9, 3, 0, 0},       // lvl 11
-        {8, 4, 0, 0},       // lvl 12
-        {4, 12, 0, 0},      // lvl 13
-        {9, 9, 0, 0},       // lvl 14
-        {5, 5, 0, 0},       // lvl 15
-        {6, 7, 0, 0},       // lvl 16   
-        {10, 10, 0, 0},     // lvl 17
+        {3, 2, 0, 0},       // lvl 4
+        {5, 4, 0, 0},       // lvl 5
+        {5, 9, 1, 0},       // lvl 6
+        {8, 11, 2, 0},      // lvl 7
+        {16, 4, 4, 0},      // lvl 8
+        {14, 5, 5, 0},      // lvl 9
+        {12, 6, 6, 1},      // lvl 10
+        {9, 4, 4, 0},       // lvl 11
+        {8, 4, 5, 2},       // lvl 12
+        {4, 12, 8, 4},      // lvl 13
+        {9, 9, 10, 0},      // lvl 14
+        {5, 5, 3, 8},       // lvl 15
+        {1, 1, 1, 1},       // lvl 16   
+        {10, 10, 10, 10},   // lvl 17
         {5, 3, 1, 0},       // lvl 18
         {12, 3, 1, 0},      // lvl 19
         {8, 4, 2, 0},       // lvl 20
@@ -80,17 +80,17 @@ public class GameLogic {
     private int calculateCooldown(Color c) {
         int base;
         if (c == Color.RED) {
-            base = 300;
+            base = 150;
         } else if (c == Color.ORANGE) {
-            base = 600;
+            base = 200;
         } else if (c == Color.YELLOW) {
-            base = 900;
+            base = 250;
         } else { // blue
-            base = 1200;
+            base = 300;
         }
 
         int randomNumber = random.nextInt(10); // 0-10
-        int cooldown = Math.max(5, (base / (currentLevel + 10)) + randomNumber);
+        int cooldown = Math.max(5, (base / (currentLevel + 5)) + randomNumber);
 
         return cooldown;
     }
@@ -108,6 +108,7 @@ public class GameLogic {
                 }
                 
                 currentLevel++;
+                money += 10;
 
                 if (currentLevel >= levels.length) {
                     GamePanel.gameOver = true;
@@ -116,7 +117,7 @@ public class GameLogic {
                 }
             } else {
                 int randomCooldownNumber = random.nextInt(10);
-                spawnCooldown = (1000 / (currentLevel + 10)) + randomCooldownNumber;
+                spawnCooldown = (600 / (currentLevel + 10)) + randomCooldownNumber;
             }
             increaseLevel = !increaseLevel;
 

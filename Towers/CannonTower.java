@@ -40,13 +40,14 @@ public class CannonTower extends Tower {
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
+            incLevel();
             this.innerColorRGB -= 25;
             this.cooldownTime -= 5;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 1f;
             this.range += 5;
-            // hits 3 times (40, 28, 16)
-            if (this.bulletSpeed % 4 == 0) {
+            // 4 times (0, 3, 6, 9)
+            if ((getLevel() % 3) == 0) {
                 this.bulletHealth += 1;
             }
             return true;

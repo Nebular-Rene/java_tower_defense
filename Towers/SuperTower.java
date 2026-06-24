@@ -31,7 +31,6 @@ public class SuperTower extends Tower {
 
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
-            // Vector3d aim = getAimSpot(first, 6.7f);
             bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.BLUE, this.bulletSize, 1));
             cooldown = this.cooldownTime; // Reset cooldown
         }
@@ -40,13 +39,16 @@ public class SuperTower extends Tower {
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
+            incLevel();
             this.innerColorRGB -= 25;
             this.cooldownTime -= 1;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
-            this.bulletSpeed += 0.25f;
+            this.bulletSpeed += 0.35f;
             this.range += 1;
-            if (this.bulletSize <= 10) {
+            // 4 times (0, 3, 6, 9)
+            if ((getLevel() % 3) == 0) {
                 this.bulletSize += 1;
+                this.range += 1;
             }
             return true;
         }

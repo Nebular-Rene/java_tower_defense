@@ -40,6 +40,7 @@ public class MagicTower extends Tower {
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
+            incLevel();
             this.innerColorRGB -= 25;
             this.cooldownTime -= 15;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);

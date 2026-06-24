@@ -10,7 +10,7 @@ public class ArrowTower extends Tower {
         this.innerColorRGB = 250;
         this.bulletSize = 7;
         this.bulletHealth = 1;
-        this.cooldownTime = 52;        
+        this.cooldownTime = 42;        
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ArrowTower extends Tower {
         if (this.innerColorRGB > 0) {
             incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 4;
+            this.cooldownTime -= 3;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 0.13f;
             this.range += 3;
@@ -50,8 +50,6 @@ public class ArrowTower extends Tower {
             if (getLevel() == 5) {
                 this.bulletHealth += 1;
             }
-            System.out.println("cooldown: " + this.cooldownTime);
-            System.out.println("health: " + this.bulletHealth);
             return true;
         }
         return false;        

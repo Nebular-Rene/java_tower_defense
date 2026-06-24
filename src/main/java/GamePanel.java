@@ -18,6 +18,10 @@ public class GamePanel extends JPanel {
     private boolean placeMode = false;
     private boolean placeSwitchOn = false;
     private String activeTower;
+    private Color colorDarkGreen = new Color(50, 200, 100);
+    private Color colorDarkGrey = new Color(20, 20, 20);
+    private Color colorOrange = new Color(255, 100, 0);
+    private Color colorGoldYellow = new Color(255, 200, 0);
     
     public static boolean gameOver = false;
     public static boolean looseGame = false;
@@ -142,14 +146,14 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // Background
-                g2d.setColor(new Color(50, 200, 100));
+                g2d.setColor(colorDarkGreen);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
 
                 // Circle
                 int circleX = isSelected() ? getWidth() - getHeight() + 2 : 2;
                 Color frameColor = (isSelected())
-                    ? new Color(20, 20, 20)
-                    : new Color(50, 200, 100);
+                    ? colorDarkGrey
+                    : colorDarkGreen;
                 g2d.setColor(frameColor);
                 g2d.fillOval(circleX, 2, getHeight() - 4, getHeight() - 4);
 
@@ -180,15 +184,15 @@ public class GamePanel extends JPanel {
                 }
 
                 // Arrow
-                g2d.setColor(new Color(50, 200, 100));
+                g2d.setColor(colorDarkGreen);
                 int[] xPoints = {11, 7, 15};
                 int[] yPoints = {7, 16, 16};
                 g2d.fillPolygon(xPoints, yPoints, 3);
 
                 // Frame
                 Color frameColor = (logic != null && logic.money >= 50)
-                    ? new Color(50, 200, 100) // green
-                    : new Color(255, 100, 0); // orange
+                    ? colorDarkGreen // green
+                    : colorOrange; // orange
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
@@ -210,7 +214,7 @@ public class GamePanel extends JPanel {
         upgradeButton.setBorderPainted(false);
         upgradeButton.setFocusPainted(false);
         upgradeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        upgradeButton.setForeground(new Color(50, 200, 100));
+        upgradeButton.setForeground(colorDarkGreen);
         upgradeButton.setBounds(655, 205, 60, 25);
         upgradeButton.addActionListener(e -> {
             if (activeTower == "upgradeButton") {
@@ -251,7 +255,7 @@ public class GamePanel extends JPanel {
                 }
 
                 // Arrow
-                g2d.setColor(new Color(255, 100, 0));
+                g2d.setColor(colorOrange);
                 int[] xPoints = {11, 7, 15};
                 int[] yPoints = {16, 7, 7};
                 g2d.fillPolygon(xPoints, yPoints, 3);
@@ -279,7 +283,7 @@ public class GamePanel extends JPanel {
         sellButton.setBorderPainted(false);
         sellButton.setFocusPainted(false);
         sellButton.setFont(new Font("Arial", Font.BOLD, 14));
-        sellButton.setForeground(new Color(50, 200, 100));
+        sellButton.setForeground(colorDarkGreen);
         sellButton.setBounds(725, 205, 60, 25);
         sellButton.addActionListener(e -> {
             if (activeTower == "sellButton") {
@@ -311,11 +315,11 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // background
-                g2d.setColor(new Color(20, 20, 20));
+                g2d.setColor(colorDarkGrey);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
                 // frame
-                Color frameColor = new Color(50, 200, 100);
+                Color frameColor = colorDarkGreen;
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
@@ -367,11 +371,11 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // background
-                g2d.setColor(new Color(20, 20, 20));
+                g2d.setColor(colorDarkGrey);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
                 // frame
-                Color frameColor = new Color(50, 200, 100);
+                Color frameColor = colorDarkGreen;
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
@@ -440,6 +444,8 @@ public class GamePanel extends JPanel {
         drawMenuBackground(g2d);
 
         menuMoneyDisplay(g2d);
+
+        levelDisplay(g2d);
 
         if (gameOver) {
             GameEndScreen(g2d);
@@ -516,7 +522,7 @@ public class GamePanel extends JPanel {
     // endregion
 
     private void drawGrid(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 30));
+        g.setColor(new Color(0, 0, 0, 30)); // transparent black
         for (int x = 0; x < 800; x += GRID_SIZE) {
             g.drawLine(x, 0, x, 600);
         }
@@ -553,15 +559,15 @@ public class GamePanel extends JPanel {
             if (activeTower == "Arrow" && logic.money >= logic.towerPriceArrow) {
                 logic.tower.add(new ArrowTower(tp));
                 logic.money -= logic.towerPriceArrow;
-                logic.towerPriceArrow += 20;
+                logic.towerPriceArrow += 30;
             } else if (activeTower == "Cannon" && logic.money >= logic.towerPriceCannon) {
                 logic.tower.add(new CannonTower(tp));
                 logic.money -= logic.towerPriceCannon;
-                logic.towerPriceCannon += 30;
+                logic.towerPriceCannon += 40;
             } else if (activeTower == "Magic" && logic.money >= logic.towerPriceMagic) {
                 logic.tower.add(new MagicTower(tp));
                 logic.money -= logic.towerPriceMagic;
-                logic.towerPriceMagic += 50;
+                logic.towerPriceMagic += 60;
             } else if (activeTower == "Super" && logic.money >= logic.towerPriceSuper) {
                 logic.tower.add(new SuperTower(tp));
                 logic.money -= logic.towerPriceSuper;
@@ -630,16 +636,16 @@ public class GamePanel extends JPanel {
         }
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        g2d.setColor(new Color(0, 0, 0, 167));
+        g2d.setColor(new Color(0, 0, 0, 167)); // transparent black
         g2d.fillRect(0, 0, getWidth(), getHeight());
         
         g2d.setFont(new Font("Arial", Font.BOLD, 67));
         String finalText;
         if (GamePanel.looseGame) {
-            g2d.setColor(new Color(255, 100, 0));
+            g2d.setColor(colorOrange);
             finalText = "YOU LOOSE!";
         } else {
-            g2d.setColor(new Color(50, 200, 100));
+            g2d.setColor(colorDarkGreen);
             finalText = "YOU WIN!";
         }
         FontMetrics fm = g2d.getFontMetrics();
@@ -648,6 +654,20 @@ public class GamePanel extends JPanel {
         g2d.drawString(finalText, textX, textY);
         
         g2d.dispose();
+    }
+    // endregion
+
+    // region Level Display
+    private void levelDisplay(Graphics2D g2d) {
+        String currentLevelText = "Round: " + logic.currentLevel + "/" + logic.levels.length;
+        g2d.setFont(new Font("Arial", Font.BOLD, 14));
+        //int textWidth = g2d.getFontMetrics().stringWidth(currentLevelText);
+        int textHeight = g2d.getFontMetrics().getAscent();
+        int levelX = 5; // grows to the left
+        int levelY = (GRID_SIZE - textHeight) + 40; // center of grid + next grid
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(currentLevelText, levelX, levelY);
     }
     // endregion
 
@@ -660,7 +680,7 @@ public class GamePanel extends JPanel {
         Color frameColor = Color.BLUE;
 
         // Background
-        g2d.setColor(new Color(20, 20, 20));
+        g2d.setColor(colorDarkGrey);
         g2d.fillRoundRect(x, y, w, h, arc, arc);
 
         // Frame
@@ -679,7 +699,7 @@ public class GamePanel extends JPanel {
         int moneyX = 780 - textWidth; // grows to the left
         int moneyY = (GRID_SIZE - textHeight); // center of grid
         
-        g2d.setColor(new Color(255, 200, 0)); // goldyellow
+        g2d.setColor(colorGoldYellow); // goldyellow
         g2d.drawString(moneyText, moneyX, moneyY);
     }
     // endregion
@@ -703,8 +723,8 @@ public class GamePanel extends JPanel {
 
                 // Frame
                 Color frameColor = (logic != null && logic.money >= currentPrice)
-                    ? new Color(50, 200, 100) // green
-                    : new Color(255, 100, 0); // orange
+                    ? colorDarkGreen // green
+                    : colorOrange; // orange
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
@@ -732,7 +752,7 @@ public class GamePanel extends JPanel {
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setForeground(new Color(50, 200, 100));
+        button.setForeground(colorDarkGreen);
         return button;
     }
     // endregion
