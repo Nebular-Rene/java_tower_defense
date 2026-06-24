@@ -227,7 +227,7 @@ public class GamePanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (activeTower == "upgradeButton" && placeMode) {
                     // upgrade logic can be put heree lol
-                    System.out.println("upgrade logic");
+                    System.out.println("upgrade");
                     upgradeTower(e.getX(), e.getY());
                 }
             }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class ArrowTower extends Tower {
 
     public ArrowTower(Vector3d pos) {
-        super(pos, "Arrow", Color.RED, 150);
+        super(pos, "Arrow", Color.RED, 140);
         this.bulletSpeed = 6.7f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
@@ -22,7 +22,7 @@ public class ArrowTower extends Tower {
 
         Enemy first = null; // Track the first enemy in range
         for (Enemy enemy : enemies) {
-            boolean inRange = pos.dst(enemy.pos) < 150;
+            boolean inRange = pos.dst(enemy.pos) < this.range;
             boolean firstEnemy = first == null || enemy.progress > first.progress;
             if (inRange && firstEnemy) {
                 first = enemy;
@@ -32,7 +32,7 @@ public class ArrowTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, 7, 1));
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, 7, this.bulletHealth));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
@@ -44,7 +44,11 @@ public class ArrowTower extends Tower {
             this.cooldownTime -= 3;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 0.13f;
-            this.range += 3;
+            this.range += 4;
+            // one time at 5 upgrades
+            if (this.cooldown == 25) {
+                this.bulletHealth += 1;
+            }
             return true;
         }
         return false;        
