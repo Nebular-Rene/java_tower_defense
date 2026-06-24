@@ -9,6 +9,7 @@ public class GamePanel extends JPanel {
     // private static final Color BUTTON_COLOR = 
 
     public boolean playButton = false;
+    public boolean doubbleSpeed = false;
 
     private static final int GRID_SIZE = 40;
     private boolean[][] occupied;
@@ -356,6 +357,67 @@ public class GamePanel extends JPanel {
         });
 
         this.add(startStopButton);
+        // endregion
+
+        // region Speed Control Button
+        JButton speedControlButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // background
+                g2d.setColor(new Color(20, 20, 20));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+                // frame
+                Color frameColor = new Color(50, 200, 100);
+                g2d.setColor(frameColor);
+                g2d.setStroke(new BasicStroke(2.5f));
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                // form
+                g2d.setColor(frameColor);
+                String text;
+                if (doubbleSpeed) {
+                    text = "2x";
+                }
+                else {
+                    text = "1x";
+                }
+                g2d.setFont(getFont());
+                FontMetrics fm = g2d.getFontMetrics();
+                int textX = getWidth() - fm.stringWidth(text) - 8;
+                int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+                g2d.drawString(text, textX, textY);
+                
+                g2d.dispose();
+                // super.paintComponent(g);
+            }
+        };
+        speedControlButton.setContentAreaFilled(false);
+        speedControlButton.setBorderPainted(false);
+        speedControlButton.setFocusPainted(false);
+        speedControlButton.setFont(new Font("Arial", Font.BOLD, 18));
+        speedControlButton.setBounds(42, 2, 36, 36);
+
+        speedControlButton.addActionListener(e -> {
+            if (!doubbleSpeed) {
+                doubbleSpeed = true;
+                logic.timerSpeed = 16;
+                System.out.print("true");
+            }
+            else {
+                doubbleSpeed = false;
+                logic.timerSpeed = 33;
+                System.out.print("false");
+            }
+            if (logic.timer != null) {
+                logic.timer.setDelay(logic.timerSpeed);
+            }
+        });
+
+        this.add(speedControlButton);
         // endregion
 
     }

@@ -5,12 +5,12 @@ public class ArrowTower extends Tower {
 
     public ArrowTower(Vector3d pos) {
         super(pos, "Arrow", Color.RED, 140);
-        this.bulletSpeed = 6.7f;
+        this.bulletSpeed = 10f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
         this.bulletSize = 7;
         this.bulletHealth = 1;
-        this.cooldownTime = 40;        
+        this.cooldownTime = 52;        
     }
 
     @Override
@@ -40,15 +40,18 @@ public class ArrowTower extends Tower {
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
+            incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 3;
+            this.cooldownTime -= 4;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 0.13f;
-            this.range += 4;
+            this.range += 3;
             // one time at 5 upgrades
-            if (this.cooldown == 25) {
+            if (getLevel() == 5) {
                 this.bulletHealth += 1;
             }
+            System.out.println("cooldown: " + this.cooldownTime);
+            System.out.println("health: " + this.bulletHealth);
             return true;
         }
         return false;        

@@ -5,7 +5,7 @@ public class SuperTower extends Tower {
     
     public SuperTower(Vector3d pos) {
         super(pos, "Super", Color.GREEN, 100);
-        this.bulletSpeed = 3f;
+        this.bulletSpeed = 4.5f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
         this.bulletSize = 5;

@@ -5,7 +5,7 @@ public class MagicTower extends Tower {
     
     public MagicTower(Vector3d pos) {
         super(pos, "Magic", Color.BLUE, 115);
-        this.bulletSpeed = 4.5f;
+        this.bulletSpeed = 6.7f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
         this.bulletSize = 15;

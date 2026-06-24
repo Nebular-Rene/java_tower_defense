@@ -35,13 +35,13 @@ class Enemy {
     
     private float setSpeed() {
         if (color == Color.RED) {
-            return 1.5f;
+            return 2.5f;
         } else if (color == Color.ORANGE) {
-            return 1.8f;
+            return 3.0f;
         } else if (color == Color.YELLOW) {
-            return 2.2f;
+            return 3.6f;
         } else if (color == Color.BLUE) {
-            return 3f;
+            return 4.5f;
         }
         return 1f; // Default speed - shouldnt exist btw
     }

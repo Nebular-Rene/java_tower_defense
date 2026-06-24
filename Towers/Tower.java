@@ -21,6 +21,7 @@ abstract class Tower {
     int bulletHealth = 1;
     int cooldownTime = 40;
     int innerColorRGB = 250;
+    int currentTowerLevel = 0;
     
     public Tower(Vector3d pos, String type, Color color, int range) {
         this.pos = pos;
@@ -35,6 +36,14 @@ abstract class Tower {
     public abstract void shoot(ArrayList<Enemy> enemies, ArrayList<Bullet> bullets);
 
     public abstract boolean Upgrade();
+
+    public int getLevel() {
+        return currentTowerLevel;
+    }
+
+    public void incLevel() {
+        currentTowerLevel++;
+    }
 
     // not yet used
     public Vector3d getAimSpot(Enemy enemy, double bulletSpeed) {

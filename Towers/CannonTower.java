@@ -5,12 +5,12 @@ public class CannonTower extends Tower {
     
     public CannonTower(Vector3d pos) {
         super(pos, "Cannon", Color.LIGHT_GRAY, 167);
-        this.bulletSpeed = 11f;
+        this.bulletSpeed = 16.5f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
         this.bulletSize = 6;
         this.bulletHealth = 1;
-        this.cooldownTime = 60;
+        this.cooldownTime = 70;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CannonTower extends Tower {
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 4;
+            this.cooldownTime -= 5;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 1f;
             this.range += 5;
