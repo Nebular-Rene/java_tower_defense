@@ -659,7 +659,7 @@ public class GamePanel extends JPanel {
 
     // region Level Display
     private void levelDisplay(Graphics2D g2d) {
-        String currentLevelText = "Round: " + logic.currentLevel + "/" + logic.levels.length;
+        String currentLevelText = "Round: " + logic.currentLevel + "/" + (logic.levels.length - 1);
         g2d.setFont(new Font("Arial", Font.BOLD, 14));
         //int textWidth = g2d.getFontMetrics().stringWidth(currentLevelText);
         int textHeight = g2d.getFontMetrics().getAscent();

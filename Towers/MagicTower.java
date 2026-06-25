@@ -4,13 +4,13 @@ import java.util.ArrayList;
 public class MagicTower extends Tower {
     
     public MagicTower(Vector3d pos) {
-        super(pos, "Magic", Color.BLUE, 115);
+        super(pos, "Magic", Color.BLUE, 125);
         this.bulletSpeed = 6.7f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
         this.bulletSize = 15;
-        this.bulletHealth = 5;
-        this.cooldownTime = 250;
+        this.bulletHealth = 6;
+        this.cooldownTime = 200;
     }
 
     @Override
@@ -42,11 +42,11 @@ public class MagicTower extends Tower {
         if (this.innerColorRGB > 0) {
             incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 15;
+            this.cooldownTime -= 12;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 0.15f;
             this.bulletHealth += 1;
-            this.range += 2;
+            this.range += 3;
             this.bulletSize += 1;
             return true;
         }

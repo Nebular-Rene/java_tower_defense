@@ -5,13 +5,17 @@ class Enemy {
 
     public Vector3d pos;
     public Vector3d movement;
+    public boolean alive = true;
+    public float progress = 0; // Track the enemy's progress along the path
+    public boolean gameLoose = false;
+    public int health;
 
-    float speed;
-    Color color;
-    boolean alive = true;
-    float progress = 0; // Track the enemy's progress along the path
-    int waypointIndex = 0; // Track the current waypoint index for movement
-    boolean gameLoose = false;
+    private float speed;
+    private Color color;
+    private int waypointIndex = 0; // Track the current waypoint index for movement
+    private Color colorBrown = new Color(165, 42, 42);
+    private Color colorSkyBlue = new Color(135, 206, 235);
+
 
     static final Vector3d[] WAYPOINTS = {
         new Vector3d(-20, 500, 0), // Start (links outside)
@@ -28,24 +32,31 @@ class Enemy {
 
     public Enemy(Color color) {
         this.pos = WAYPOINTS[0].cpy(); // Start y position
-        this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
         this.color = color;
-        this.speed = setSpeed();
+        setSpeedAndHealth();
+        this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
     }
     
-    private float setSpeed() {
+    private void setSpeedAndHealth() {
         if (color == Color.RED) {
-            return 2.0f;
+            this.health = 1;
+            this.speed = 2.0f;
         } else if (color == Color.ORANGE) {
-            return 3.0f;
+            this.health = 1;
+            this.speed = 2.67f;
         } else if (color == Color.YELLOW) {
-            return 3.8f;
+            this.health = 1;
+            this.speed = 3.3f;
         } else if (color == Color.BLUE) {
-            return 4.3f;
-        } else if (color == new Color(165, 42, 42)) {// brown
-            return 3.0f;
+            this.health = 1;
+            this.speed = 4.0f;
+        } else if (color.equals(colorBrown)) {
+            this.health = 10;
+            this.speed = 2.3f;
+        } else if (color.equals(colorSkyBlue)) {
+            this.health = 200;
+            this.speed = 1.5f;
         }
-        return 1f; // Default speed - shouldnt exist btw
     }
 
     public void move() {
@@ -73,6 +84,10 @@ class Enemy {
     }
 
     public void hit() {
+        if (this.health > 1) {
+            this.health--;
+            return;
+        }
         // Handle what happens when the enemy is hit by a bullet (e.g., reduce health, check for death)
         if (color == Color.RED) {
             alive = false;          // Enemy is destroyed
@@ -82,8 +97,12 @@ class Enemy {
             color = Color.ORANGE;   // Further damage indication
         } else if (color == Color.BLUE) {
             color = Color.YELLOW;   // Further damage indication
+        } else if (color.equals(colorBrown)) {
+            color = Color.BLUE;
+        } else if (color.equals(colorSkyBlue)) {
+            alive = false;
         }
-        this.speed = setSpeed(); // Update speed based on new color (health) after being hit
+        setSpeedAndHealth(); // Update speed based on new color (health) after being hit
 
     }
 

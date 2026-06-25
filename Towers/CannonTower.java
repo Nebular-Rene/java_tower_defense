@@ -10,7 +10,7 @@ public class CannonTower extends Tower {
         this.innerColorRGB = 250;
         this.bulletSize = 6;
         this.bulletHealth = 1;
-        this.cooldownTime = 70;
+        this.cooldownTime = 67;
     }
 
     @Override
@@ -44,10 +44,10 @@ public class CannonTower extends Tower {
             this.innerColorRGB -= 25;
             this.cooldownTime -= 5;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
-            this.bulletSpeed += 1f;
-            this.range += 5;
-            // 4 times (0, 3, 6, 9)
-            if ((getLevel() % 3) == 0) {
+            this.bulletSpeed += 1.005f;
+            this.range += 6;
+            // 2 times (0, 6)
+            if ((getLevel() % 5) == 1) {
                 this.bulletHealth += 1;
             }
             return true;
