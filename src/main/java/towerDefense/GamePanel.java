@@ -1,8 +1,16 @@
+package towerDefense;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import towerDefense.towers.ArrowTower;
+import towerDefense.towers.CannonTower;
+import towerDefense.towers.MagicTower;
+import towerDefense.towers.SuperTower;
+import towerDefense.towers.Tower;
 
 public class GamePanel extends JPanel {
 
@@ -455,7 +463,7 @@ public class GamePanel extends JPanel {
 
 
     private void drawObjects(Graphics g) {
-        for (Tower tower : logic.tower) {
+        for (Tower tower :  logic.tower) {
             tower.drawRange(g);
         }
         for (Tower tower : logic.tower) {

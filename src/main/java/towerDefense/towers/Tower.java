@@ -1,3 +1,5 @@
+package towerDefense.towers;
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
@@ -5,7 +7,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-abstract class Tower {
+import towerDefense.Vector3d;
+import towerDefense.Enemy;
+import towerDefense.Bullet;
+
+public abstract class Tower {
 
     public Vector3d pos;
     public boolean alive = true;

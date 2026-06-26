@@ -1,16 +1,22 @@
+package towerDefense.towers;
+
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class ArrowTower extends Tower {
+import towerDefense.Vector3d;
+import towerDefense.Enemy;
+import towerDefense.Bullet;
 
-    public ArrowTower(Vector3d pos) {
-        super(pos, "Arrow", Color.RED, 140);
-        this.bulletSpeed = 10f;
+public class MagicTower extends Tower {
+    
+    public MagicTower(Vector3d pos) {
+        super(pos, "Magic", Color.BLUE, 125);
+        this.bulletSpeed = 6.7f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
-        this.bulletSize = 7;
-        this.bulletHealth = 1;
-        this.cooldownTime = 42;        
+        this.bulletSize = 15;
+        this.bulletHealth = 6;
+        this.cooldownTime = 200;
     }
 
     @Override
@@ -32,24 +38,22 @@ public class ArrowTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, 7, this.bulletHealth));
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, this.bulletSize, this.bulletHealth));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
-    
+
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
             incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 3;
+            this.cooldownTime -= 12;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
-            this.bulletSpeed += 0.13f;
+            this.bulletSpeed += 0.15f;
+            this.bulletHealth += 1;
             this.range += 3;
-            // one time at 5 upgrades
-            if (getLevel() == 5) {
-                this.bulletHealth += 1;
-            }
+            this.bulletSize += 1;
             return true;
         }
         return false;        

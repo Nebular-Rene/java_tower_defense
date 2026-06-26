@@ -1,8 +1,9 @@
+package towerDefense;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-class Bullet {
+public class Bullet {
     Vector3d pos;
     Vector3d movement;
     float targetX, targetY;

@@ -1,4 +1,9 @@
+package towerDefense;
+
 import javax.swing.*;
+
+import towerDefense.towers.Tower;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.awt.Color;
@@ -35,7 +40,7 @@ public class GameLogic {
         {3, 2, 0, 0, 0, 0},       // lvl 4
         {5, 4, 0, 0, 0, 0},       // lvl 5
         {5, 9, 1, 0, 0, 0},       // lvl 6
-        {8, 11,2, 0, 0, 0},      // lvl 7
+        {8, 8, 3, 0, 0, 0},      // lvl 7
         {16,4, 4, 0, 0, 0},      // lvl 8
         {14,5, 5, 0, 0, 0},      // lvl 9
         {12,6, 6, 1, 0, 0},      // lvl 10
@@ -97,6 +102,7 @@ public class GameLogic {
             base = 67; // shouldnt exist
         }
 
+        // cooldown between bloons
         int randomNumber = random.nextInt(10); // 0-10
         int cooldown = Math.max(5, (base / (currentLevel + 5)) + randomNumber);
 
@@ -124,8 +130,9 @@ public class GameLogic {
                     return;
                 }
             } else {
+                // cooldown between phases
                 int randomCooldownNumber = random.nextInt(10);
-                spawnCooldown = (600 / (currentLevel + 10)) + randomCooldownNumber;
+                spawnCooldown = (600 / (currentLevel + 5)) + randomCooldownNumber;
             }
             increaseLevel = !increaseLevel;
 
@@ -143,7 +150,7 @@ public class GameLogic {
 
         } else {
             Color next = spawnQueue.remove(0);
-            enemies.add(new Enemy(next));
+            enemies.add(new Enemy(next, currentLevel));
             spawnCooldown = calculateCooldown(next);
         }
 

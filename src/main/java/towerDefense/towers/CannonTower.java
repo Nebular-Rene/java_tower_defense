@@ -1,16 +1,22 @@
+package towerDefense.towers;
+
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class SuperTower extends Tower {
+import towerDefense.Vector3d;
+import towerDefense.Enemy;
+import towerDefense.Bullet;
+
+public class CannonTower extends Tower {
     
-    public SuperTower(Vector3d pos) {
-        super(pos, "Super", Color.GREEN, 100);
-        this.bulletSpeed = 4.5f;
+    public CannonTower(Vector3d pos) {
+        super(pos, "Cannon", Color.LIGHT_GRAY, 167);
+        this.bulletSpeed = 16.5f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
-        this.bulletSize = 5;
+        this.bulletSize = 6;
         this.bulletHealth = 1;
-        this.cooldownTime = 15;
+        this.cooldownTime = 67;
     }
 
     @Override
@@ -31,24 +37,24 @@ public class SuperTower extends Tower {
 
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.BLUE, this.bulletSize, 1));
+            // Vector3d aim = getAimSpot(first, 6.7f);
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.GRAY, 6, this.bulletHealth));
             cooldown = this.cooldownTime; // Reset cooldown
         }
-    }  
+    }
 
     @Override
     public boolean Upgrade() {
         if (this.innerColorRGB > 0) {
             incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 1;
+            this.cooldownTime -= 5;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
-            this.bulletSpeed += 0.35f;
-            this.range += 1;
-            // 4 times (0, 3, 6, 9)
-            if ((getLevel() % 3) == 0) {
-                this.bulletSize += 1;
-                this.range += 1;
+            this.bulletSpeed += 1.005f;
+            this.range += 6;
+            // 2 times (0, 6)
+            if ((getLevel() % 5) == 1) {
+                this.bulletHealth += 1;
             }
             return true;
         }

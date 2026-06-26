@@ -1,7 +1,10 @@
+package towerDefense;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
-class Enemy {
+
+public class Enemy {
 
     public Vector3d pos;
     public Vector3d movement;
@@ -9,6 +12,7 @@ class Enemy {
     public float progress = 0; // Track the enemy's progress along the path
     public boolean gameLoose = false;
     public int health;
+    public int currentLevel;
 
     private float speed;
     private Color color;
@@ -30,23 +34,24 @@ class Enemy {
         new Vector3d(0, 0, 0),  // extra waypoint - might not be too clean but it works ;)
     };
 
-    public Enemy(Color color) {
+    public Enemy(Color color, int currentLevel) {
         this.pos = WAYPOINTS[0].cpy(); // Start y position
         this.color = color;
         setSpeedAndHealth();
         this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
+        this.currentLevel = currentLevel;
     }
     
     private void setSpeedAndHealth() {
         if (color == Color.RED) {
             this.health = 1;
-            this.speed = 2.0f;
+            this.speed = 1.8f;
         } else if (color == Color.ORANGE) {
             this.health = 1;
-            this.speed = 2.67f;
+            this.speed = 2.5f;
         } else if (color == Color.YELLOW) {
             this.health = 1;
-            this.speed = 3.3f;
+            this.speed = 3.2f;
         } else if (color == Color.BLUE) {
             this.health = 1;
             this.speed = 4.0f;
@@ -55,8 +60,9 @@ class Enemy {
             this.speed = 2.3f;
         } else if (color.equals(colorSkyBlue)) {
             this.health = 200;
-            this.speed = 1.5f;
+            this.speed = 1.4f;
         }
+        this.speed *= (1.0f + (0.01f * this.currentLevel));
     }
 
     public void move() {
