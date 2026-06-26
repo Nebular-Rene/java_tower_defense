@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
 import towerDefense.Enemy;
 import towerDefense.Bullet;
@@ -17,7 +18,7 @@ public abstract class Tower {
     public boolean alive = true;
 
     Color outerColor;
-    Color innerColor = Color.WHITE;
+    Color innerColor;
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
     int range;
@@ -29,10 +30,11 @@ public abstract class Tower {
     int innerColorRGB = 250;
     int currentTowerLevel = 0;
     
-    public Tower(Vector3d pos, String type, Color color, int range) {
+    public Tower(Vector3d pos, String type, TD_Colors color, int range) {
         this.pos = pos;
         this.type = type;
-        this.outerColor = color;
+        this.outerColor = color.color;
+        this.innerColor = TD_Colors.WHITE.color;
         this.range = range;
         
         this.cooldown = 0; // Initialize cooldown

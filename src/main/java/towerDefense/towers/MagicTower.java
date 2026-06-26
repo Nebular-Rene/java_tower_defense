@@ -3,6 +3,7 @@ package towerDefense.towers;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
 import towerDefense.Enemy;
 import towerDefense.Bullet;
@@ -10,7 +11,7 @@ import towerDefense.Bullet;
 public class MagicTower extends Tower {
     
     public MagicTower(Vector3d pos) {
-        super(pos, "Magic", Color.BLUE, 125);
+        super(pos, "Magic", TD_Colors.BLUE, 125);
         this.bulletSpeed = 6.7f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
@@ -38,7 +39,7 @@ public class MagicTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.WHITE, this.bulletSize, this.bulletHealth));
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, TD_Colors.WHITE, this.bulletSize, this.bulletHealth));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
