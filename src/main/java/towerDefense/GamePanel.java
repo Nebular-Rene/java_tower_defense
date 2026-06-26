@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import towerDefense.towers.ArrowTower;
 import towerDefense.towers.CannonTower;
@@ -17,19 +18,15 @@ public class GamePanel extends JPanel {
     // private static final Color BUTTON_COLOR = 
 
     public boolean playButton = false;
-    public boolean doubbleSpeed = false;
+    public boolean doubleSpeed = false;
 
     private static final int GRID_SIZE = 40;
-    private boolean[][] occupied;
+    private final boolean[][] occupied;
     private BufferedImage backgroundImage;
-    private ArrayList<Rectangle> pathRects;
+    private final ArrayList<Rectangle> pathRects;
     private boolean placeMode = false;
     private boolean placeSwitchOn = false;
     private String activeTower;
-    private Color colorDarkGreen = new Color(50, 200, 100);
-    private Color colorDarkGrey = new Color(20, 20, 20);
-    private Color colorOrange = new Color(255, 100, 0);
-    private Color colorGoldYellow = new Color(255, 200, 0);
     
     public static boolean gameOver = false;
     public static boolean looseGame = false;
@@ -49,8 +46,8 @@ public class GamePanel extends JPanel {
         // region Arrow Tower Button
         JButton buyArrowTowerButton = menuBuyTowerButton(Color.RED, "Arrow");
         buyArrowTowerButton.setBounds(655, 45, 130, 30);
-        buyArrowTowerButton.addActionListener(e -> {
-            if (activeTower == "Arrow") {
+        buyArrowTowerButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "Arrow")) {
                 placeMode = !placeMode;
             }
             else {
@@ -63,7 +60,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Arrow" && placeMode) {
+                if (Objects.equals(activeTower, "Arrow") && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -74,8 +71,8 @@ public class GamePanel extends JPanel {
         // region Cannon Tower Button
         JButton buyCannonTowerButton = menuBuyTowerButton(Color.LIGHT_GRAY, "Cannon");
         buyCannonTowerButton.setBounds(655, 85, 130, 30);
-        buyCannonTowerButton.addActionListener(e -> {
-            if (activeTower == "Cannon") {
+        buyCannonTowerButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "Cannon")) {
                 placeMode = !placeMode;
             }
             else {
@@ -88,7 +85,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Cannon" && placeMode) {
+                if (Objects.equals(activeTower, "Cannon") && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -99,8 +96,8 @@ public class GamePanel extends JPanel {
         // region Magic Tower Button
         JButton buyMagicTowerButton = menuBuyTowerButton(Color.BLUE, "Magic");
         buyMagicTowerButton.setBounds(655, 125, 130, 30);
-        buyMagicTowerButton.addActionListener(e -> {
-            if (activeTower == "Magic") {
+        buyMagicTowerButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "Magic")) {
                 placeMode = !placeMode;
             }
             else {
@@ -113,7 +110,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Magic" && placeMode) {
+                if (Objects.equals(activeTower, "Magic") && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -124,8 +121,8 @@ public class GamePanel extends JPanel {
         // region Super Tower Button
         JButton buySuperTowerButton = menuBuyTowerButton(Color.GREEN, "Super");
         buySuperTowerButton.setBounds(655, 165, 130, 30);
-        buySuperTowerButton.addActionListener(e -> {
-            if (activeTower == "Super") {
+        buySuperTowerButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "Super")) {
                 placeMode = !placeMode;
             }
             else {
@@ -138,7 +135,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (activeTower == "Super" && placeMode) {
+                if (Objects.equals(activeTower, "Super") && placeMode) {
                     placeTower(e.getX(), e.getY());
                 }
             }
@@ -147,6 +144,55 @@ public class GamePanel extends JPanel {
         // endregion
 
         // region Buy Tower Toggle Switch
+        JToggleButton slideSwitch = getJToggleButton();
+
+        this.add(slideSwitch);
+        // endregion
+
+        // region Upgrade Button
+        JButton upgradeButton = getJButton();
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (Objects.equals(activeTower, "upgradeButton") && placeMode) {
+                    // upgrade logic can be put heree lol
+                    System.out.println("upgrade");
+                    upgradeTower(e.getX(), e.getY());
+                }
+            }
+        });
+        this.add(upgradeButton);
+
+        // endregion
+
+        // region Sell Button
+        JButton sellButton = getButton();
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (Objects.equals(activeTower, "sellButton") && placeMode) {
+                    sellTower(e.getX(), e.getY());
+                }
+            }
+        });
+        this.add(sellButton);
+        // endregion
+
+        // region Start/Stop Button
+        JButton startStopButton = getStartStopButton();
+
+        this.add(startStopButton);
+        // endregion
+
+        // region Speed Control Button
+        JButton speedControlButton = getSpeedControlButton();
+
+        this.add(speedControlButton);
+        // endregion
+
+    }
+
+    private JToggleButton getJToggleButton() {
         JToggleButton slideSwitch = new JToggleButton() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -154,14 +200,14 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // Background
-                g2d.setColor(colorDarkGreen);
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
 
                 // Circle
                 int circleX = isSelected() ? getWidth() - getHeight() + 2 : 2;
                 Color frameColor = (isSelected())
-                    ? colorDarkGrey
-                    : colorDarkGreen;
+                    ? TD_Colors.DARK_GRAY.color
+                    : TD_Colors.DARK_GREEN.color;
                 g2d.setColor(frameColor);
                 g2d.fillOval(circleX, 2, getHeight() - 4, getHeight() - 4);
 
@@ -174,82 +220,123 @@ public class GamePanel extends JPanel {
         slideSwitch.setBorderPainted(false);
         slideSwitch.setFocusPainted(false);
         slideSwitch.setBounds(650, 10, 20, 20); // breiter als hoch
+        return slideSwitch;
+    }
 
-        this.add(slideSwitch);
-        // endregion
-
-        // region Upgrade Button
-        JButton upgradeButton = new JButton() {
+    private JButton getStartStopButton() {
+        JButton startStopButton = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Background
-                if (placeMode && activeTower == "upgradeButton") {
-                    g2d.setColor(Color.DARK_GRAY);
-                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                }
+                // background
+                g2d.setColor(TD_Colors.DARK_GRAY.color);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
-                // Arrow
-                g2d.setColor(colorDarkGreen);
-                int[] xPoints = {11, 7, 15};
-                int[] yPoints = {7, 16, 16};
-                g2d.fillPolygon(xPoints, yPoints, 3);
-
-                // Frame
-                Color frameColor = (logic != null && logic.money >= 50)
-                    ? colorDarkGreen // green
-                    : colorOrange; // orange
-                g2d.setColor(frameColor);
-                g2d.setStroke(new BasicStroke(2f));
+                // frame;
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
+                g2d.setStroke(new BasicStroke(2.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
-                // Text right-aligned
-                String text = "50 $";
+                // form
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
+                if (playButton) {
+                    // x, y, width, height, horizontal-, vertical- roundness of corners
+                    g2d.fillRoundRect(6, 6, 24, 24, 8, 8);
+
+                }
+                else {
+                    int[] xPoints = {7, 7, 30};
+                    int[] yPoints = {7, 30, 18};
+                    g2d.fillPolygon(xPoints, yPoints, 3);
+                }
+
+
+
+                g2d.dispose();
+                // super.paintComponent(g);
+            }
+        };
+        startStopButton.setContentAreaFilled(false);
+        startStopButton.setBorderPainted(false);
+        //startStopButton.setFont(new Font("Arial", Font.BOLD, 1));
+        startStopButton.setFocusPainted(false);
+        startStopButton.setBounds(2, 2, 36, 36);
+
+        startStopButton.addActionListener(_ -> {
+            if (playButton) {
+                playButton = false;
+                logic.timer.stop();
+            }
+            else {
+                playButton = true;
+                logic.timer.start();
+            }
+        });
+        return startStopButton;
+    }
+
+    private JButton getSpeedControlButton() {
+        JButton speedControlButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // background
+                g2d.setColor(TD_Colors.DARK_GRAY.color);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+                // frame
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
+                g2d.setStroke(new BasicStroke(2.5f));
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+
+                // form
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
+                String text;
+                if (doubleSpeed) {
+                    text = "2x";
+                }
+                else {
+                    text = "1x";
+                }
                 g2d.setFont(getFont());
-                g2d.setColor(frameColor);
                 FontMetrics fm = g2d.getFontMetrics();
-                int textX = getWidth() - fm.stringWidth(text) - 10;
+                int textX = getWidth() - fm.stringWidth(text) - 8;
                 int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
                 g2d.drawString(text, textX, textY);
 
                 g2d.dispose();
-                repaint();
+                // super.paintComponent(g);
             }
         };
-        upgradeButton.setContentAreaFilled(false);
-        upgradeButton.setBorderPainted(false);
-        upgradeButton.setFocusPainted(false);
-        upgradeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        upgradeButton.setForeground(colorDarkGreen);
-        upgradeButton.setBounds(655, 205, 60, 25);
-        upgradeButton.addActionListener(e -> {
-            if (activeTower == "upgradeButton") {
-                placeMode = !placeMode;
+        speedControlButton.setContentAreaFilled(false);
+        speedControlButton.setBorderPainted(false);
+        speedControlButton.setFocusPainted(false);
+        speedControlButton.setFont(new Font("Arial", Font.BOLD, 18));
+        speedControlButton.setBounds(42, 2, 36, 36);
+
+        speedControlButton.addActionListener(_ -> {
+            if (!doubleSpeed) {
+                doubleSpeed = true;
+                logic.timerSpeed = 16;
+                System.out.print("true");
             }
             else {
-                placeMode = true;
+                doubleSpeed = false;
+                logic.timerSpeed = 33;
+                System.out.print("false");
             }
-            if (placeMode) {
-                activeTower = "upgradeButton";
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (activeTower == "upgradeButton" && placeMode) {
-                    // upgrade logic can be put heree lol
-                    System.out.println("upgrade");
-                    upgradeTower(e.getX(), e.getY());
-                }
+            if (logic.timer != null) {
+                logic.timer.setDelay(logic.timerSpeed);
             }
         });
-        this.add(upgradeButton);
+        return speedControlButton;
+    }
 
-        // endregion
-
-        // region Sell Button
+    private JButton getButton() {
         JButton sellButton = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -257,13 +344,13 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 // Background
-                if (placeMode && activeTower == "sellButton") {
+                if (placeMode && Objects.equals(activeTower, "sellButton")) {
                     g2d.setColor(Color.DARK_GRAY);
                     g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
                 }
 
                 // Arrow
-                g2d.setColor(colorOrange);
+                g2d.setColor(TD_Colors.CUSTOM_ORANGE.color);
                 int[] xPoints = {11, 7, 15};
                 int[] yPoints = {16, 7, 7};
                 g2d.fillPolygon(xPoints, yPoints, 3);
@@ -291,10 +378,10 @@ public class GamePanel extends JPanel {
         sellButton.setBorderPainted(false);
         sellButton.setFocusPainted(false);
         sellButton.setFont(new Font("Arial", Font.BOLD, 14));
-        sellButton.setForeground(colorDarkGreen);
+        sellButton.setForeground(TD_Colors.DARK_GREEN.color);
         sellButton.setBounds(725, 205, 60, 25);
-        sellButton.addActionListener(e -> {
-            if (activeTower == "sellButton") {
+        sellButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "sellButton")) {
                 placeMode = !placeMode;
             }
             else {
@@ -304,134 +391,67 @@ public class GamePanel extends JPanel {
                 activeTower = "sellButton";
             }
         });
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (activeTower == "sellButton" && placeMode) {
-                    sellTower(e.getX(), e.getY());
-                }
-            }
-        });
-        this.add(sellButton);
-        // endregion
+        return sellButton;
+    }
 
-        // region Start/Stop Button
-        JButton startStopButton = new JButton() {
+    private JButton getJButton() {
+        JButton upgradeButton = new JButton() {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // background
-                g2d.setColor(colorDarkGrey);
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                // Background
+                if (placeMode && Objects.equals(activeTower, "upgradeButton")) {
+                    g2d.setColor(Color.DARK_GRAY);
+                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                }
 
-                // frame
-                Color frameColor = colorDarkGreen;
+                // Arrow
+                g2d.setColor(TD_Colors.DARK_GREEN.color);
+                int[] xPoints = {11, 7, 15};
+                int[] yPoints = {7, 16, 16};
+                g2d.fillPolygon(xPoints, yPoints, 3);
+
+                // Frame
+                Color frameColor = (logic != null && logic.money >= 50)
+                    ? TD_Colors.DARK_GREEN.color  // green
+                    : TD_Colors.CUSTOM_ORANGE.color; // orange
                 g2d.setColor(frameColor);
-                g2d.setStroke(new BasicStroke(2.5f));
+                g2d.setStroke(new BasicStroke(2f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
-                // form
-                g2d.setColor(frameColor);
-                if (playButton) {
-                    // x, y, width, height, horizontal-, vertical- roundness of corners
-                    g2d.fillRoundRect(6, 6, 24, 24, 8, 8);
-
-                }
-                else {
-                    int[] xPoints = {7, 7, 30};
-                    int[] yPoints = {7, 30, 18};
-                    g2d.fillPolygon(xPoints, yPoints, 3);
-                }
-                
-
-
-                g2d.dispose();
-                // super.paintComponent(g);
-            }
-        };
-        startStopButton.setContentAreaFilled(false);
-        startStopButton.setBorderPainted(false);
-        //startStopButton.setFont(new Font("Arial", Font.BOLD, 1));
-        startStopButton.setFocusPainted(false);
-        startStopButton.setBounds(2, 2, 36, 36);
-
-        startStopButton.addActionListener(e -> {
-            if (playButton) {
-                playButton = false;
-                logic.timer.stop();
-            }
-            else {
-                playButton = true;
-                logic.timer.start();
-            }
-        });
-
-        this.add(startStopButton);
-        // endregion
-
-        // region Speed Control Button
-        JButton speedControlButton = new JButton() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                // background
-                g2d.setColor(colorDarkGrey);
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-
-                // frame
-                Color frameColor = colorDarkGreen;
-                g2d.setColor(frameColor);
-                g2d.setStroke(new BasicStroke(2.5f));
-                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-
-                // form
-                g2d.setColor(frameColor);
-                String text;
-                if (doubbleSpeed) {
-                    text = "2x";
-                }
-                else {
-                    text = "1x";
-                }
+                // Text right-aligned
+                String text = "50 $";
                 g2d.setFont(getFont());
+                g2d.setColor(frameColor);
                 FontMetrics fm = g2d.getFontMetrics();
-                int textX = getWidth() - fm.stringWidth(text) - 8;
+                int textX = getWidth() - fm.stringWidth(text) - 10;
                 int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
                 g2d.drawString(text, textX, textY);
-                
+
                 g2d.dispose();
-                // super.paintComponent(g);
+                repaint();
             }
         };
-        speedControlButton.setContentAreaFilled(false);
-        speedControlButton.setBorderPainted(false);
-        speedControlButton.setFocusPainted(false);
-        speedControlButton.setFont(new Font("Arial", Font.BOLD, 18));
-        speedControlButton.setBounds(42, 2, 36, 36);
-
-        speedControlButton.addActionListener(e -> {
-            if (!doubbleSpeed) {
-                doubbleSpeed = true;
-                logic.timerSpeed = 16;
-                System.out.print("true");
+        upgradeButton.setContentAreaFilled(false);
+        upgradeButton.setBorderPainted(false);
+        upgradeButton.setFocusPainted(false);
+        upgradeButton.setFont(new Font("Arial", Font.BOLD, 14));
+        upgradeButton.setForeground(TD_Colors.DARK_GREEN.color);
+        upgradeButton.setBounds(655, 205, 60, 25);
+        upgradeButton.addActionListener(_ -> {
+            if (Objects.equals(activeTower, "upgradeButton")) {
+                placeMode = !placeMode;
             }
             else {
-                doubbleSpeed = false;
-                logic.timerSpeed = 33;
-                System.out.print("false");
+                placeMode = true;
             }
-            if (logic.timer != null) {
-                logic.timer.setDelay(logic.timerSpeed);
+            if (placeMode) {
+                activeTower = "upgradeButton";
             }
         });
-
-        this.add(speedControlButton);
-        // endregion
-
+        return upgradeButton;
     }
 
     public void setLogic(GameLogic logic) {
@@ -564,19 +584,19 @@ public class GamePanel extends JPanel {
 
         if (!occupied[gridX][gridY]) {
             Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
-            if (activeTower == "Arrow" && logic.money >= logic.towerPriceArrow) {
+            if (Objects.equals(activeTower, "Arrow") && logic.money >= logic.towerPriceArrow) {
                 logic.tower.add(new ArrowTower(tp));
                 logic.money -= logic.towerPriceArrow;
                 logic.towerPriceArrow += 30;
-            } else if (activeTower == "Cannon" && logic.money >= logic.towerPriceCannon) {
+            } else if (Objects.equals(activeTower, "Cannon") && logic.money >= logic.towerPriceCannon) {
                 logic.tower.add(new CannonTower(tp));
                 logic.money -= logic.towerPriceCannon;
                 logic.towerPriceCannon += 40;
-            } else if (activeTower == "Magic" && logic.money >= logic.towerPriceMagic) {
+            } else if (Objects.equals(activeTower, "Magic") && logic.money >= logic.towerPriceMagic) {
                 logic.tower.add(new MagicTower(tp));
                 logic.money -= logic.towerPriceMagic;
                 logic.towerPriceMagic += 60;
-            } else if (activeTower == "Super" && logic.money >= logic.towerPriceSuper) {
+            } else if (Objects.equals(activeTower, "Super") && logic.money >= logic.towerPriceSuper) {
                 logic.tower.add(new SuperTower(tp));
                 logic.money -= logic.towerPriceSuper;
                 logic.towerPriceSuper += 80;
@@ -650,10 +670,10 @@ public class GamePanel extends JPanel {
         g2d.setFont(new Font("Arial", Font.BOLD, 67));
         String finalText;
         if (GamePanel.looseGame) {
-            g2d.setColor(colorOrange);
+            g2d.setColor(TD_Colors.CUSTOM_ORANGE.color);
             finalText = "YOU LOOSE!";
         } else {
-            g2d.setColor(colorDarkGreen);
+            g2d.setColor(TD_Colors.DARK_GREEN.color);
             finalText = "YOU WIN!";
         }
         FontMetrics fm = g2d.getFontMetrics();
@@ -688,7 +708,7 @@ public class GamePanel extends JPanel {
         Color frameColor = Color.BLUE;
 
         // Background
-        g2d.setColor(colorDarkGrey);
+        g2d.setColor(TD_Colors.DARK_GRAY.color);
         g2d.fillRoundRect(x, y, w, h, arc, arc);
 
         // Frame
@@ -707,7 +727,7 @@ public class GamePanel extends JPanel {
         int moneyX = 780 - textWidth; // grows to the left
         int moneyY = (GRID_SIZE - textHeight); // center of grid
         
-        g2d.setColor(colorGoldYellow); // goldyellow
+        g2d.setColor(TD_Colors.GOLD_YELLOW.color); // goldyellow
         g2d.drawString(moneyText, moneyX, moneyY);
     }
     // endregion
@@ -724,15 +744,15 @@ public class GamePanel extends JPanel {
                 int currentPrice = getCurrentTowerPrice(towerKind);
 
                 // Background
-                if (placeMode && activeTower == towerKind) {
+                if (placeMode && Objects.equals(activeTower, towerKind)) {
                     g2d.setColor(Color.DARK_GRAY);
                     g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
                 }
 
                 // Frame
                 Color frameColor = (logic != null && logic.money >= currentPrice)
-                    ? colorDarkGreen // green
-                    : colorOrange; // orange
+                    ? TD_Colors.DARK_GREEN.color  // green
+                    : TD_Colors.CUSTOM_ORANGE.color; // orange
                 g2d.setColor(frameColor);
                 g2d.setStroke(new BasicStroke(2f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
@@ -760,7 +780,7 @@ public class GamePanel extends JPanel {
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setForeground(colorDarkGreen);
+        button.setForeground(TD_Colors.DARK_GREEN.color);
         return button;
     }
     // endregion
@@ -770,17 +790,12 @@ public class GamePanel extends JPanel {
     // Helper method to get current tower price
     private int getCurrentTowerPrice(String towerType) {
         if (logic == null) return 0;
-        switch (towerType) {
-            case "Arrow":
-                return logic.towerPriceArrow;
-            case "Cannon":
-                return logic.towerPriceCannon;
-            case "Magic":
-                return logic.towerPriceMagic;
-            case "Super":
-                return logic.towerPriceSuper;
-            default:
-                return 0;
-        }
+        return switch (towerType) {
+            case "Arrow" -> logic.towerPriceArrow;
+            case "Cannon" -> logic.towerPriceCannon;
+            case "Magic" -> logic.towerPriceMagic;
+            case "Super" -> logic.towerPriceSuper;
+            default -> 0;
+        };
     }
 }

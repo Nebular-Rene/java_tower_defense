@@ -34,9 +34,9 @@ public class Enemy {
         new Vector3d(0, 0, 0),  // extra waypoint - might not be too clean but it works ;)
     };
 
-    public Enemy(Color color, int currentLevel) {
+    public Enemy(TD_Colors color, int currentLevel) {
         this.pos = WAYPOINTS[0].cpy(); // Start y position
-        this.color = color;
+        this.color = color.color;
         setSpeedAndHealth();
         this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
         this.currentLevel = currentLevel;

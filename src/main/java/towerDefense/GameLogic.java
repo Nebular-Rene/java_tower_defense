@@ -24,9 +24,7 @@ public class GameLogic {
     public int timerSpeed = 33;
     public int currentLevel = 0;
 
-    private Color colorBrown = new Color(165, 42, 42); 
-    private Color colorSkyBlue = new Color(135, 206, 235);
-    private ArrayList<Color> spawnQueue = new ArrayList<>();
+    private ArrayList<TD_Colors> spawnQueue = new ArrayList<>();
     private Random random = new Random();
     private boolean increaseLevel = true;
     private int spawnCooldown = 0;
@@ -94,9 +92,9 @@ public class GameLogic {
             base = 250;
         } else if (c == Color.BLUE) { // blue
             base = 300;
-        } else if (c == colorBrown) {
+        } else if (c == TD_Colors.BROWN.color) {
             base = 350;
-        } else if (c == colorSkyBlue) {
+        } else if (c == TD_Colors.SKY_BLUE.color) {
             base = 1000;
         } else {
             base = 67; // shouldnt exist
@@ -140,7 +138,7 @@ public class GameLogic {
 
             spawnQueue.clear();
 
-            Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.BLUE, colorBrown, colorSkyBlue};
+            TD_Colors[] colors = {TD_Colors.RED, TD_Colors.ORANGE, TD_Colors.YELLOW, TD_Colors.BLUE, TD_Colors.BROWN, TD_Colors.SKY_BLUE};
             for (int i = 0; i < currentLevelConfig.length; i++) {
                 for (int j = 0; j < currentLevelConfig[i]; j++) {
                 spawnQueue.add(colors[i]);
@@ -149,9 +147,9 @@ public class GameLogic {
             Collections.shuffle(spawnQueue, random);
 
         } else {
-            Color next = spawnQueue.remove(0);
+            TD_Colors next = spawnQueue.removeFirst();
             enemies.add(new Enemy(next, currentLevel));
-            spawnCooldown = calculateCooldown(next);
+            spawnCooldown = calculateCooldown(next.color);
         }
 
     }

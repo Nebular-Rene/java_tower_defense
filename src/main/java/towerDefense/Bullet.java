@@ -15,11 +15,11 @@ public class Bullet {
     boolean hit = false;
     Enemy lastHitEnemy = null;
 
-    public Bullet(Vector3d pos, Vector3d destination, float speed, Color color, int size, int health) {
+    public Bullet(Vector3d pos, Vector3d destination, float speed, TD_Colors color, int size, int health) {
         this.pos = pos.cpy();
         this.speed = speed;
         this.movement = destination.cpy().sub(this.pos).nor().scl(this.speed);
-        this.color = color;
+        this.color = color.color;
         this.size = size;
         this.health = health;
     }

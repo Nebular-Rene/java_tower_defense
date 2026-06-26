@@ -3,6 +3,7 @@ package towerDefense.towers;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
 import towerDefense.Enemy;
 import towerDefense.Bullet;
@@ -10,7 +11,7 @@ import towerDefense.Bullet;
 public class SuperTower extends Tower {
     
     public SuperTower(Vector3d pos) {
-        super(pos, "Super", Color.GREEN, 100);
+        super(pos, "Super", TD_Colors.GREEN, 100);
         this.bulletSpeed = 4.5f;
         this.innerColor = Color.WHITE;
         this.innerColorRGB = 250;
@@ -37,7 +38,7 @@ public class SuperTower extends Tower {
 
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, Color.BLUE, this.bulletSize, 1));
+            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, TD_Colors.BLUE, this.bulletSize, 1));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
