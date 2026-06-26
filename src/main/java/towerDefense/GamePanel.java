@@ -27,6 +27,11 @@ public class GamePanel extends JPanel {
     private boolean placeMode = false;
     private boolean placeSwitchOn = false;
     private String activeTower;
+    private Tower selectedTowerRange = null;
+    private Color colorDarkGreen = new Color(50, 200, 100);
+    private Color colorDarkGrey = new Color(20, 20, 20);
+    private Color colorOrange = new Color(255, 100, 0);
+    private Color colorGoldYellow = new Color(255, 200, 0);
     
     public static boolean gameOver = false;
     public static boolean looseGame = false;
@@ -401,57 +406,13 @@ public class GamePanel extends JPanel {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Background
-                if (placeMode && Objects.equals(activeTower, "upgradeButton")) {
-                    g2d.setColor(Color.DARK_GRAY);
-                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                }
-
-                // Arrow
-                g2d.setColor(TD_Colors.DARK_GREEN.color);
-                int[] xPoints = {11, 7, 15};
-                int[] yPoints = {7, 16, 16};
-                g2d.fillPolygon(xPoints, yPoints, 3);
-
-                // Frame
-                Color frameColor = (logic != null && logic.money >= 50)
-                    ? TD_Colors.DARK_GREEN.color  // green
-                    : TD_Colors.CUSTOM_ORANGE.color; // orange
-                g2d.setColor(frameColor);
-                g2d.setStroke(new BasicStroke(2f));
-                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-
-                // Text right-aligned
-                String text = "50 $";
-                g2d.setFont(getFont());
-                g2d.setColor(frameColor);
-                FontMetrics fm = g2d.getFontMetrics();
-                int textX = getWidth() - fm.stringWidth(text) - 10;
-                int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-                g2d.drawString(text, textX, textY);
-
-                g2d.dispose();
-                repaint();
-            }
-        };
-        upgradeButton.setContentAreaFilled(false);
-        upgradeButton.setBorderPainted(false);
-        upgradeButton.setFocusPainted(false);
-        upgradeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        upgradeButton.setForeground(TD_Colors.DARK_GREEN.color);
-        upgradeButton.setBounds(655, 205, 60, 25);
-        upgradeButton.addActionListener(_ -> {
-            if (Objects.equals(activeTower, "upgradeButton")) {
-                placeMode = !placeMode;
-            }
-            else {
-                placeMode = true;
-            }
-            if (placeMode) {
-                activeTower = "upgradeButton";
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                handleTowerClick(e.getX(), e.getY());
             }
         });
-        return upgradeButton;
+
     }
 
     public void setLogic(GameLogic logic) {
@@ -482,9 +443,11 @@ public class GamePanel extends JPanel {
     }
 
 
-    private void drawObjects(Graphics g) {
-        for (Tower tower :  logic.tower) {
-            tower.drawRange(g);
+    private void drawObjects(Graphics g) { 
+        // only show selected tower range ;) 
+        if (selectedTowerRange != null) {
+            selectedTowerRange.drawRange(g);
+            repaint();
         }
         for (Tower tower : logic.tower) {
             tower.draw(g);
@@ -650,6 +613,30 @@ public class GamePanel extends JPanel {
                             repaint();
                         }
                     }                    
+                    break;
+                }
+            }
+        }
+    }
+
+    private void handleTowerClick(int mouseX, int mouseY) {
+        int gridX = mouseX / GRID_SIZE;
+        int gridY = mouseY / GRID_SIZE;
+
+        if (placeMode) {
+            return;
+        }
+
+        if (occupied[gridX][gridY]) {
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
+            for (Tower t : logic.tower) {
+                // looks for identical position
+                if (t.pos.idt(tp)) {
+                    if (selectedTowerRange == t) {
+                        selectedTowerRange = null;
+                    }else {
+                        selectedTowerRange = t;
+                    }          
                     break;
                 }
             }

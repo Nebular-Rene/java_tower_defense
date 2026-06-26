@@ -14,7 +14,7 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 0;
+    public int money = 99990;
     public int towerPrice = 0;
     public int towerPriceArrow = 0;
     public int towerPriceCannon = 40;

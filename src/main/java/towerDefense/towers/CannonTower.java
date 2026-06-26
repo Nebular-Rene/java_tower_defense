@@ -51,11 +51,12 @@ public class CannonTower extends Tower {
             this.innerColorRGB -= 25;
             this.cooldownTime -= 5;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
-            this.bulletSpeed += 1.005f;
+            this.bulletSpeed += 1.05f;
             this.range += 6;
-            // 2 times (0, 6)
+            // 2 times (1, 5)
             if ((getLevel() % 5) == 1) {
                 this.bulletHealth += 1;
+                this.bulletSize++;
             }
             return true;
         }
