@@ -26,6 +26,7 @@ public class GamePanel extends JPanel {
     private boolean placeMode = false;
     private boolean placeSwitchOn = false;
     private String activeTower;
+    private Tower selectedTowerRange = null;
     private Color colorDarkGreen = new Color(50, 200, 100);
     private Color colorDarkGrey = new Color(20, 20, 20);
     private Color colorOrange = new Color(255, 100, 0);
@@ -432,6 +433,13 @@ public class GamePanel extends JPanel {
         this.add(speedControlButton);
         // endregion
 
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                handleTowerClick(e.getX(), e.getY());
+            }
+        });
+
     }
 
     public void setLogic(GameLogic logic) {
@@ -462,9 +470,11 @@ public class GamePanel extends JPanel {
     }
 
 
-    private void drawObjects(Graphics g) {
-        for (Tower tower :  logic.tower) {
-            tower.drawRange(g);
+    private void drawObjects(Graphics g) { 
+        // only show selected tower range ;) 
+        if (selectedTowerRange != null) {
+            selectedTowerRange.drawRange(g);
+            repaint();
         }
         for (Tower tower : logic.tower) {
             tower.draw(g);
@@ -630,6 +640,30 @@ public class GamePanel extends JPanel {
                             repaint();
                         }
                     }                    
+                    break;
+                }
+            }
+        }
+    }
+
+    private void handleTowerClick(int mouseX, int mouseY) {
+        int gridX = mouseX / GRID_SIZE;
+        int gridY = mouseY / GRID_SIZE;
+
+        if (placeMode) {
+            return;
+        }
+
+        if (occupied[gridX][gridY]) {
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
+            for (Tower t : logic.tower) {
+                // looks for identical position
+                if (t.pos.idt(tp)) {
+                    if (selectedTowerRange == t) {
+                        selectedTowerRange = null;
+                    }else {
+                        selectedTowerRange = t;
+                    }          
                     break;
                 }
             }
