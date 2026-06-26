@@ -1,13 +1,11 @@
 package towerDefense;
 
-import javax.swing.*;
-
-import towerDefense.towers.Tower;
-
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.awt.Color;
 import java.util.Random;
+import javax.swing.*;
+import towerDefense.towers.Tower;
 
 public class GameLogic {
 
@@ -24,8 +22,8 @@ public class GameLogic {
     public int timerSpeed = 33;
     public int currentLevel = 0;
 
-    private ArrayList<TD_Colors> spawnQueue = new ArrayList<>();
-    private Random random = new Random();
+    private final ArrayList<TD_Colors> spawnQueue = new ArrayList<>();
+    private final Random random = new Random();
     private boolean increaseLevel = true;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0, 0, 0};
@@ -75,7 +73,7 @@ public class GameLogic {
 
     };
 
-    private GamePanel panel;
+    private final GamePanel panel;
 
     // constructor
     public GameLogic(GamePanel panel) {

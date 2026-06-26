@@ -1,12 +1,11 @@
 package towerDefense;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Objects;
-
+import javax.swing.*;
 import towerDefense.towers.ArrowTower;
 import towerDefense.towers.CannonTower;
 import towerDefense.towers.MagicTower;
@@ -24,6 +23,7 @@ public class GamePanel extends JPanel {
     private final boolean[][] occupied;
     private BufferedImage backgroundImage;
     private final ArrayList<Rectangle> pathRects;
+    private Tower selectedTowerRange = null;
     private boolean placeMode = false;
     private boolean placeSwitchOn = false;
     private String activeTower;
@@ -189,6 +189,13 @@ public class GamePanel extends JPanel {
 
         this.add(speedControlButton);
         // endregion
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                handleTowerClick(e.getX(), e.getY());
+            }
+        });
 
     }
 
@@ -483,8 +490,10 @@ public class GamePanel extends JPanel {
 
 
     private void drawObjects(Graphics g) {
-        for (Tower tower :  logic.tower) {
-            tower.drawRange(g);
+        // only show selected tower range ;) 
+        if (selectedTowerRange != null) {
+            selectedTowerRange.drawRange(g);
+            repaint();
         }
         for (Tower tower : logic.tower) {
             tower.draw(g);
@@ -650,6 +659,30 @@ public class GamePanel extends JPanel {
                             repaint();
                         }
                     }                    
+                    break;
+                }
+            }
+        }
+    }
+
+    private void handleTowerClick(int mouseX, int mouseY) {
+        int gridX = mouseX / GRID_SIZE;
+        int gridY = mouseY / GRID_SIZE;
+
+        if (placeMode) {
+            return;
+        }
+
+        if (occupied[gridX][gridY]) {
+            Vector3d tp = new Vector3d(gridX * GRID_SIZE, gridY * GRID_SIZE, 0);
+            for (Tower t : logic.tower) {
+                // looks for identical position
+                if (t.pos.idt(tp)) {
+                    if (selectedTowerRange == t) {
+                        selectedTowerRange = null;
+                    }else {
+                        selectedTowerRange = t;
+                    }          
                     break;
                 }
             }
